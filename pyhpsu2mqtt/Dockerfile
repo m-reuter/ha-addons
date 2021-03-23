@@ -6,7 +6,7 @@ ENV LANG C.UTF-8
 # install packages
 #RUN apt-get update && \
 #    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-RUN apk add --no-cache
+RUN apk add --no-cache \
     ca-certificates \
     git \
     python3 \
