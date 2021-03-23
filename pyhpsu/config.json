@@ -6,6 +6,7 @@
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
   "startup": "system",
   "boot": "auto",
+  "host_network": true,
   "options": {
     "pyhpsu_device": "PYCAN",
     "pyhpsu_port": "",
