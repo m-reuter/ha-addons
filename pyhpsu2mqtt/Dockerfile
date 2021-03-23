@@ -10,14 +10,10 @@ RUN apk add --no-cache \
     ca-certificates \
     git \
     python3 \
-    python3-can \
-    python3-serial \
-    python3-mysqldb \
-    python3-paho-mqtt \
-    python3-pika \
-    python3-requests \
-    python3-urllib3
-#    && rm -rf /var/lib/apt/lists/*
+    py3-pip \
+    && pip3 install --no-cache --upgrade pip setuptools wheel \
+    && pip3 install python-can serial paho-mqtt pika requests urllib3
+
 
 # install pyHPSU
 RUN cd /opt \

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ev
+echo "Addons: $@"
 archs="${ARCHS}"
+echo "Archs: $archs"
 for addon in "$@"; do
   if [ -z ${TRAVIS_COMMIT_RANGE} ] || git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -v README.md | grep -q ${addon}; then
     if [ -z "$archs" ]; then
