@@ -4,8 +4,9 @@ FROM $BUILD_FROM
 ENV LANG C.UTF-8
 
 # install packages
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+#RUN apt-get update && \
+#    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+RUN apk add --no-cache
     ca-certificates \
     git \
     python3 \
@@ -15,8 +16,8 @@ RUN apt-get update && \
     python3-paho-mqtt \
     python3-pika \
     python3-requests \
-    python3-urllib3 \
-    && rm -rf /var/lib/apt/lists/*
+    python3-urllib3
+#    && rm -rf /var/lib/apt/lists/*
 
 # install pyHPSU
 RUN cd /opt \
