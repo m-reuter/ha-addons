@@ -9,7 +9,7 @@ before_install:
 #  - chmod u+x create_hassio_addon.sh
 #  - docker pull multiarch/qemu-user-static
 env:
-  - ADDON="pyhpsu"
+  - ADDON="pyhpsu2mqtt"
 #  - ADDON="vzlogger"
 script:
 #  - docker login -u $DOCKER_USER -p $DOCKER_PASS
