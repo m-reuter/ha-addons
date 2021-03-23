@@ -12,5 +12,6 @@ env:
   - ADDON="pyhpsu"
 #  - ADDON="vzlogger"
 script:
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+#  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - ./build.sh $ADDON 
