@@ -13,6 +13,7 @@ for addon in "$@"; do
     docker run \
 	    --rm \
 	    --privileged \
+	    -v /var/run/docker.sock:/var/run/docker.sock:ro \
 	    -v ~/.docker:/root/.docker \
 	    -v $(pwd)/${addon}:/data \
 	    homeassistant/amd64-builder \
