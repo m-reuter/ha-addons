@@ -4,16 +4,13 @@ FROM $BUILD_FROM
 ENV LANG C.UTF-8
 
 # install packages
-#RUN apt-get update && \
-#    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
 RUN apk add --no-cache \
     ca-certificates \
     git \
     python3 \
-    py3-pip 
-RUN pip3 install --no-cache --upgrade pip setuptools wheel \
+    py3-pip \
+    && pip3 install --no-cache --upgrade pip setuptools wheel \
     && pip3 install python-can serial paho-mqtt pika requests urllib3
-
 
 # install pyHPSU
 RUN cd /opt \
@@ -24,10 +21,8 @@ RUN cd /opt \
     && chmod +x install.sh \
     && sh install.sh
 
-
 # Copy data for add-on
 COPY run.sh /
 RUN chmod a+x /run.sh
 
 CMD [ "/run.sh" ]
-
