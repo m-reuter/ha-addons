@@ -9,7 +9,15 @@ for addon in "$@"; do
     fi
     echo "Archs: $archs"
     echo "Test: $TEST"
-    docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock:ro -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data --no-cache ${TEST}
+    #docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock:ro -v ~/.docker:/root/.docker -v $(pwd)/${addon}:/data homeassistant/amd64-builder ${archs} -t /data --no-cache ${TEST}
+    docker run \
+	    --rm \
+	    --privileged \
+	    -v ~/.docker:/root/.docker \
+	    -v $(pwd)/${addon}:/data \
+	    homeassistant/amd64-builder \
+		  --all \
+		   -t /data
 #  else
 #    echo "No change in commit range ${TRAVIS_COMMIT_RANGE}"
 #  fi
