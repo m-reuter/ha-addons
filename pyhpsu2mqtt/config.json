@@ -10,7 +10,8 @@
   "options": {
     "pyhpsu_device": "PYCAN",
     "pyhpsu_port": "",
-    "mqtt_ip": "127.0.0.1",
+    "pyhpsu_lang": "EN",
+    "mqtt_broker": "127.0.0.1",
     "mqtt_port": 1883,
     "mqtt_username": "",
     "mqtt_password": "",
@@ -25,7 +26,8 @@
   "schema": {
     "pyhpsu_device": "str",
     "pyhpsu_port": "str?",
-    "mqtt_ip": "str",
+    "pyhpsu_lang": "str",
+    "mqtt_broker": "str",
     "mqtt_port": "port",
     "mqtt_username": "str?",
     "mqtt_password": "password?",
