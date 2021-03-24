@@ -1,5 +1,5 @@
 # pyHPSU to MQTT Add-on
-[![Build Status](https://travis-ci.com/mreuter/ha-addons.svg?branch=master)](https://travis-ci.com/mreuter/ha-addons)
+[![Build Status](https://travis-ci.com/m-reuter/ha-addons.svg?branch=master)](https://travis-ci.com/m-reuter/ha-addons)
 
 ## Description
 
@@ -11,11 +11,14 @@ You can pull many different variables (flow, pressure, temperatures, statistics 
 and you can also control it by writing variables (e.g. you can raise the target hot water temp for a few 
 seconds to trigger water heating with heat pump instead of the one-hot option which uses the inefficient 
 electrical heating rod). Variables and commands are passed via MQTT, so you need to have a MQTT broker 
-running (e.g. the Mosquitto Addon in HA). Possible commands are available in the pyHPSU project.
+running (e.g. the Mosquitto Add-on in HA). Possible commands are available in the pyHPSU project.
+
+In order for this Add-on to access the can0 interface (pican 2 hat) of the host, --network host is needed. 
+If you know how to only limit access to can0 differently, let me know. 
 
 ## Configuration
 
-These parameters will populate the pyhpsu.conf, so you can also see that project for the meaning.
+These parameters will populate the pyhpsu.conf:
 
 ### pyhpsu_device (str)
 

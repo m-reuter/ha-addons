@@ -1,5 +1,5 @@
 # hassio-addons
-[![Build Status](https://www.travis-ci.com/ha-addons.svg?branch=master)](https://www.travis-ci.com/github/m-reuter/ha-addons)
+[![Build Status](https://www.travis-ci.com/m-reuter/ha-addons.svg?branch=master)](https://www.travis-ci.com/m-reuter/ha-addons)
 
 Repository for HomeAssistant Addons.
 
