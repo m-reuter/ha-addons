@@ -22,6 +22,7 @@ RUN cd /opt \
     && sh install.sh
 
 # Copy data for add-on
+COPY pyhpsu.conf /
 COPY run.sh /
 RUN chmod a+x /run.sh
 
