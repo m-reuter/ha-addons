@@ -11,8 +11,8 @@ RUN apk add --no-cache \
     git \
     python3 \
     py3-pip 
-RUN pip3 install --no-cache --upgrade pip setuptools wheel 
-RUN pip3 install python-can serial paho-mqtt pika requests urllib3
+RUN pip3 install --no-cache --upgrade pip setuptools wheel \
+    && pip3 install python-can serial paho-mqtt pika requests urllib3
 
 
 # install pyHPSU
