@@ -4,7 +4,7 @@
   "slug": "pyhpsu2mqtt",
   "description": "pyHPSU - Connect via CAN bus to ROTEX/Daikin Heat Pump",
   "__arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
-  "arch": ["armv7"],
+  "arch": ["armhf"],
   "startup": "system",
   "boot": "auto",
   "host_network": true,
