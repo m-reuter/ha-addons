@@ -15,6 +15,8 @@ MQTT_PREFIX="$(bashio::config 'mqtt_prefix')"
 MQTT_COMMANDTOPIC="$(bashio::config 'mqtt_commandtopic')"
 CANPI_TIMEOUT="$(bashio::config 'canpi_timeout')"
 JOBS="$(bashio::config 'jobs')"
+#options=$(jq -r 'if .options then [.options[] | "--"+.name+"="+.value ] | join(" ") else "" end' /data/options.json)
+
 
 # Replace in pyhpsu.conf
 sed -i "s/{pyhpsu_device}/${PYHPSU_DEVICE}/g" "pyhpsu.conf"
