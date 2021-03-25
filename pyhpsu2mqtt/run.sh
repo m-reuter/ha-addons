@@ -30,8 +30,7 @@ sed -i "s/{mqtt_clientname}/${MQTT_CLIENTNAME}/g" "pyhpsu.conf"
 sed -i "s/{mqtt_prefix}/${MQTT_PREFIX}/g" "pyhpsu.conf"
 sed -i "s/{mqtt_commandtopic}/${MQTT_COMMANDTOPIC}/g" "pyhpsu.conf"
 sed -i "s/{canpi_timeout}/${CANPI_TIMEOUT}/g" "pyhpsu.conf"
-sed -i "s/{jobs}/''/g" "pyhpsu.conf"
-echo "$JOBS" >> pyhpsu.conf
+sed -i "s/{jobs}/'${JOBS//$'\n'/\\n}'/g" "pyhpsu.conf"
 
 echo "Initializing pyhpsu configuration ..."
 cp pyhpsu.conf /etc/pyHPSU/pyhpsu.conf
