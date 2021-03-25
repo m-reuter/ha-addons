@@ -3,14 +3,14 @@
 
 ## Description
 
-This addon provides an [pyHPSU](https://github.com/Spanni26/pyHPSU) with MQTT bi-directional communication as a HomeAssistant Add-On.
+This addon provides [pyHPSU](https://github.com/Spanni26/pyHPSU) with MQTT bi-directional communication as a HomeAssistant Add-On.
 pyHPSU is a python toolbox to communicate with a Rotex/Daikin Heat Pump via CAN Bus (J13). 
 Tested hardware is Raspberry Pi 4b with a pyCAN 2 Hat. ELM327 did not work for me.
 
 You can pull many different variables (flow, pressure, temperatures, statistics etc) from the Rotex,
 and you can also control it by writing variables (e.g. you can raise the target hot water temp for a few 
 seconds to trigger water heating with heat pump instead of the one-hot option which uses the inefficient 
-electrical heating rod). Variables and commands are passed via MQTT, so you need to have a MQTT broker 
+electrical heating rod). Variables and commands are passed via MQTT, so you need to have an MQTT broker 
 running (e.g. the Mosquitto Add-on in HA). Possible commands are available in the pyHPSU project.
 
 In order for this Add-on to access the can0 interface (pican 2 hat) of the host, --network host is needed. 
