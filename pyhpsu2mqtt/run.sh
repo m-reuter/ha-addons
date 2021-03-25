@@ -35,5 +35,7 @@ sed -i "s/{jobs}/${JOBS}/g" "pyhpsu.conf"
 echo "Initializing pyhpsu configuration ..."
 cp pyhpsu.conf /etc/pyHPSU/pyhpsu.conf
 
+cat pyhpsu.conf
+
 export PYTHONPATH="/usr/lib/python3/dist-packages"
 pyHPSU.py --mqtt_daemon -a -o mqtt
