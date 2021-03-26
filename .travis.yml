@@ -12,7 +12,7 @@ before_install:
   - sudo dpkg -i "libseccomp2_2.5.1-1_amd64.deb"
 env:
   - ADDON="pyhpsu2mqtt"
-#  - ADDON="vzlogger2mqtt"
+  - ADDON="vzlogger2mqtt"
 script:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - ./build.sh $ADDON 
