@@ -1,0 +1,46 @@
+{
+  "name": "vzlogger to MQTT Gateway",
+  "version": "0.9.0",
+  "slug": "vzlogger2mqtt",
+  "description": "vzlogger - Read your Smart Meter",
+  "url": "https://github.com/m-reuter/ha-addons/tree/master/vzlogger2mqtt",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "startup": "system",
+  "boot": "auto",
+  "host_network": true,
+  "options": {
+    "verbose": 3,
+    "mqtt_broker": "127.0.0.1",
+    "mqtt_port": 1883,
+    "mqtt_username": "",
+    "mqtt_password": "",
+    "mqtt_topic": "vzlogger/data",
+    "meter_protocol": "sml",
+    "meter_parity": "8N1",
+    "meter_baudrate": 9600,
+    "meter_aggtime": 10,
+    "meter_device" : "",
+    "meter_device2" : "",
+    "channels" : [
+      { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
+      { "identifier": "1-0:1.8.0*255", "aggmode": "max" }
+    ]},
+  "schema": {
+    "verbose": "int",
+    "mqtt_broker": "str",
+    "mqtt_port": "port",
+    "mqtt_username": "str?",
+    "mqtt_password": "password?",
+    "mqtt_topic": "str",
+    "meter_protocol": "str",
+    "meter_parity": "str",
+    "meter_baudrate": "int",
+    "meter_aggtime": "int",
+    "meter_device": "str",
+    "meter_device2": "str?",
+    "channels" : [
+      { "identifier": "str", "aggmode": "str" }
+    ]
+  },
+  "image": "mreuter/{arch}-vzlogger2mqtt"
+}
