@@ -12,19 +12,14 @@ RUN apk add --no-cache \
     
 
 # build libsml and 
-# build vzlogger (need to remove -Werror for vzlogger.cpp)
+# build vzlogger (need to remove -Werror for vzlogger.cpp invalid conversion warning)
 RUN git clone -b upgrade_unity_to_v2.5.2 https://github.com/r00t-/libsml.git \
-    && cd libsml && make && cd .. 
-RUN git clone -b avoid_GLOB_BRACE https://github.com/r00t-/vzlogger.git \
+    && cd libsml && make && cd .. \
+    && git clone -b avoid_GLOB_BRACE https://github.com/r00t-/vzlogger.git \
     && cd vzlogger \
-    && cmake . -DBUILD_TEST=off -DSML_HOME=../libsml/sml
-RUN cd /vzlogger/ && make 
-RUN cd /vzlogger/src && /usr/bin/c++ -DHAVE_CONFIG_HPP -I/libsml/sml/include -I/vzlogger -I/vzlogger/include -W -Wall \
-       -Wextra -Wnon-virtual-dtor -Wno-system-headers -Winit-self -Wmissing-include-dirs -Wno-pragmas \
-       -Wredundant-decls -Wno-unused-parameter -std=c++11 -fpermissive -Wno-error=redundant-decls \
-       -Wno-ignored-qualifiers -g3 -o CMakeFiles/vzlogger.dir/vzlogger.cpp.o \
-       -c /vzlogger/src/vzlogger.cpp 
-RUN cd /vzlogger/  && make && cd ..
+    && sed -i "s/-Werror/ /g" "./modules/CompilerFlags.cmake" \
+    && cmake . -DBUILD_TEST=off -DSML_HOME=../libsml/sml \
+    && make && cd ..
 
 
 # Copy data for add-on
