@@ -18,7 +18,7 @@ RUN git clone -b upgrade_unity_to_v2.5.2 https://github.com/r00t-/libsml.git \
     && git clone -b avoid_GLOB_BRACE https://github.com/r00t-/vzlogger.git \
     && cd vzlogger \
     && cmake . -DBUILD_TEST=off -DSML_HOME=../libsml/sml \
-    && make 
+    && make \
     && cd src \
     && /usr/bin/c++ -DHAVE_CONFIG_HPP -I/libsml/sml/include -I/vzlogger -I/vzlogger/include -W -Wall \
        -Wextra -Wnon-virtual-dtor -Wno-system-headers -Winit-self -Wmissing-include-dirs -Wno-pragmas \
