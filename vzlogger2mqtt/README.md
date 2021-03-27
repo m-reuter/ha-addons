@@ -14,17 +14,9 @@ smart meter.
 
 These parameters will populate the vzlogger.conf:
 
-### pyhpsu_device (str)
+### verbose (int)
 
-Should be "PYCAN", let me know if you have success connecting an ELM327.
-
-### pyhpsu_port (str)
-
-Should be empty for PYCAN device. For ELM327 this should be the TTY/USB device. 
-
-### pyhpsu_lang (str)
-
-Select language (probably not necessary for MQTT communication, default EN)
+Level of verboseness  (default: 3)
 
 ### mqtt_broker (str)
 
@@ -42,27 +34,53 @@ MQTT username to access broker
 
 MQTT password to access broker (you should setup your broker to require this!)
 
-### mqtt_clientname (str)
+### mqtt_topic (str)
 
-Name of the pyHPSU MQTT client (default: rotex_hpsu, no need to change)
+Prefix for MQTT topic to send information (default: vzlogger/data)
 
-### mqtt_prefix (str)
+### verbose (int)
 
-Prefix for topic to send information from pyHPSU to MQTT (default: rotex)
+Level of verboseness in log (default: 3)
 
-### mqtt_commandtopic (str)
+### meter_protocol (str)
 
-Topic for commands going from MQTT to pyHPSU (default: command)
+Protocol for meter, currently only sml
 
-### canpi_timeout (float)
+### meter_parity (str)
 
-Set timeout for canpi interface (default: 0.05)
+Parity setting for meter (default: 8N1)
 
-### jobs (list of dict)
+### meter_baudrate (int)
 
-pyHPSU jobs: must be entered as a list of dictionaries with this format : `{"command": "...", "interval": "..."}`
-pyHPSU will push the command in the specified interval in seconds to Rotex and report the answer back to MQTT.
-For example: 
-`{"command": "t_dhw", "interval": 10}`
-to obtain the domestic hot water temperature every 10 seconds as MQTT /rotex/t_dhw
+Baudrate for meter (default: 9600)
+
+### meter_aggtime (int)
+
+Time in seconds to aggregate meter data before sending (default: 10)
+
+### meter_device (str)
+
+Device name for IR reader on host OS, e.g.:
+`/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_D1234567A-if00-port0`
+
+### meter_device2 (str)
+
+Second device if available. Currently only max of 2 identical devices are supported,
+this means that meter settings (protocol, parity, ... and channel info) need to be identical.
+
+### channels (list of dict)
+
+Here you specify the identifiers that you want to read from the smart meter and how to
+aggregate values, e.g.:
+
+```
+  - identifier: 1-0:16.7.0*255
+    aggmode: avg
+  - identifier: 1-0:1.8.0*255
+    aggmode: max
+```
+
+Will read the total consumption (using agg: max) and the current consumption (using agg: avg) on a 
+Iskraemeco MT176. More details can be found on the volkszaehler and vzlogger pages:
+https://wiki.volkszaehler.org/software/controller/vzlogger/overview_en 
 
