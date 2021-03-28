@@ -14,9 +14,9 @@ smart meter.
 
 These parameters will populate the vzlogger.conf:
 
-### verbose (int)
+### verbosity (int)
 
-Level of verboseness  (default: 3)
+Level of verbosity (default: 3)
 
 ### mqtt_broker (str)
 
