@@ -32,7 +32,7 @@ fi
 echo "Initializing vzlogger configuration ..."
 
 sed -i "s/{verbosity}/${VERBOSITY}/g" "vzlogger.conf"
-#sed -i "s/{mqtt_broker}/${MQTT_BROKER}/g" "vzlogger.conf"
+sed -i "s/{mqtt_broker}/${MQTT_BROKER}/g" "vzlogger.conf"
 #sed -i "s/{mqtt_port}/${MQTT_PORT}/g" "vzlogger.conf"
 #sed -i "s/{mqtt_username}/${MQTT_USERNAME}/g" "vzlogger.conf"
 #sed -i "s/{mqtt_password}/${MQTT_PASSWORD}/g" "vzlogger.conf"
