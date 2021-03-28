@@ -17,9 +17,11 @@ METER_AGGTIME="$(bashio::config 'meter_aggtime')"
 METER_DEVICE="$(bashio::config 'meter_device')"
 METER_DEVICE2="$(bashio::config 'meter_device2')"
 
-CHANNELS=$(jq -r 'if .channels then [.channels[] | ""{ \"api\" : \"null\", \n \"identifier\" : \""+.identifier+""\", \n  \"aggmode\": \""+.aggmode+"\"}" | join(",\n") else "" end' /data/options.json)
+CHANNELS=$(jq -r 'if .channels then [.channels[] | "{ \"api\": \"null\", \n  \"identifier\": \""+.identifier+"\", \n  \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n") else "" end' /data/options.json)
 
 echo "$CHANNELS"
+
+METER_ENABLED2="true"
 
 # Replace in pyhpsu.conf
 echo "Initializing vzlogger configuration ..."
@@ -30,6 +32,7 @@ sed -i "s/{mqtt_port}/${MQTT_PORT}/g" "vzlogger.conf"
 sed -i "s/{mqtt_username}/${MQTT_USERNAME}/g" "vzlogger.conf"
 sed -i "s/{mqtt_password}/${MQTT_PASSWORD}/g" "vzlogger.conf"
 sed -i "s/{mqtt_topic}/${MQTT_TOPIC}/g" "vzlogger.conf"
+sed -i "s/{meter_enabled2}/${METER_ENABLED2}/g" "vzlogger.conf"
 sed -i "s/{channels}/${CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
 
