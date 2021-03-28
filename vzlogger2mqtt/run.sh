@@ -18,7 +18,7 @@ METER_DEVICE="$(bashio::config 'meter_device')"
 METER_DEVICE2="$(bashio::config 'meter_device2')"
 
 #CLEN =$(jq '.channels | length' /data/options.json)
-CHANNELS=$(jq -r 'if .channels then [.channels[] | "{ \"api\": \"null\", \n  \"identifier\": \""+.identifier+"\", \n  \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n") else "" end' /data/options.json)
+CHANNELS=$(jq -r 'if .channels then [.channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
 echo "$CHANNELS"
 
 METER_ENABLED2="false"
