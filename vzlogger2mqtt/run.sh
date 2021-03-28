@@ -17,15 +17,14 @@ METER_AGGTIME="$(bashio::config 'meter_aggtime')"
 METER_DEVICE="$(bashio::config 'meter_device')"
 METER_DEVICE2="$(bashio::config 'meter_device2')"
 
-CLEN =$(jq '.channels | length' /data/options.json)
-
+#CLEN =$(jq '.channels | length' /data/options.json)
 CHANNELS=$(jq -r 'if .channels then [.channels[] | "{ \"api\": \"null\", \n  \"identifier\": \""+.identifier+"\", \n  \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n") else "" end' /data/options.json)
-
 echo "$CHANNELS"
 
 METER_ENABLED2="false"
-if [[ $CLEN -eq 2 ]]
+if [[ ! -z $METER_DEVICE2 ]]
 then
+  echo "Enabling second meter ... "
   METER_ENABLED2="true"
 fi
 
