@@ -14,12 +14,12 @@ RUN apk add --no-cache \
 # build libsml and 
 # build vzlogger (need to remove -Werror for vzlogger.cpp invalid conversion warning)
 RUN git clone -b upgrade_unity_to_v2.5.2 https://github.com/r00t-/libsml.git \
-    && cd libsml && make && cd .. \
+    && cd libsml && make && make install && cd .. \
     && git clone -b avoid_GLOB_BRACE https://github.com/r00t-/vzlogger.git \
     && cd vzlogger \
     && sed -i "s/-Werror/ /g" "./modules/CompilerFlags.cmake" \
     && cmake . -DBUILD_TEST=off -DSML_HOME=../libsml/sml \
-    && make
+    && make && make install
 
 
 # Copy data for add-on

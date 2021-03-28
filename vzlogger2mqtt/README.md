@@ -16,7 +16,7 @@ These parameters will populate the vzlogger.conf:
 
 ### verbosity (int)
 
-Level of verbosity (default: 3). 
+Level of verbosity (default: 3): 
 0=log_alert, 1=log_error, 3=log_warning, 5=log_info, 10=log_debug, 15=log_finest
 
 ### mqtt_broker (str)
@@ -38,10 +38,6 @@ MQTT password to access broker (you should setup your broker to require this!)
 ### mqtt_topic (str)
 
 Prefix for MQTT topic to send information (default: vzlogger/data)
-
-### verbose (int)
-
-Level of verboseness in log (default: 3)
 
 ### meter_protocol (str)
 
