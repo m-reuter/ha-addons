@@ -55,5 +55,6 @@ echo
 cat vzlogger.conf
 echo
 
-
 /vzlogger/src/vzlogger --config /vzlogger.conf
+cat /vzlogger.log
+
