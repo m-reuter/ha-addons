@@ -19,7 +19,7 @@ RUN git clone -b upgrade_unity_to_v2.5.2 https://github.com/r00t-/libsml.git \
     && cd vzlogger \
     && sed -i "s/-Werror/ /g" "./modules/CompilerFlags.cmake" \
     && cmake . -DBUILD_TEST=off -DSML_HOME=../libsml/sml \
-    && make && cd ..
+    && make
 
 
 # Copy data for add-on
@@ -29,5 +29,3 @@ RUN chmod a+x /run.sh
 
 CMD [ "/run.sh" ]
 
-# Run CMD when started
-#CMD /usr/local/bin/vzlogger --config /cfg/vzlogger.conf

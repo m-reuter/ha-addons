@@ -37,7 +37,15 @@ sed -i "s/{mqtt_port}/${MQTT_PORT}/g" "vzlogger.conf"
 sed -i "s/{mqtt_username}/${MQTT_USERNAME}/g" "vzlogger.conf"
 sed -i "s/{mqtt_password}/${MQTT_PASSWORD}/g" "vzlogger.conf"
 sed -i "s#{mqtt_topic}#${MQTT_TOPIC}#g" "vzlogger.conf"
+
+sed -i "s/{meter_protocol}/${METER_PROTOCOL}/g" "vzlogger.conf"
+sed -i "s/{meter_parity}/${METER_PARITY}/g" "vzlogger.conf"
+sed -i "s/{meter_baudrate}/${METER_BAUDRATE}/g" "vzlogger.conf"
+sed -i "s/{meter_aggtime}/${METER_AGGTIME}/g" "vzlogger.conf"
+sed -i "s/{meter_device}/${METER_DEVICE}/g" "vzlogger.conf"
 sed -i "s/{meter_enabled2}/${METER_ENABLED2}/g" "vzlogger.conf"
+sed -i "s/{meter_device2}/${METER_DEVICE2}/g" "vzlogger.conf"
+
 #sed -i "s/{channels}/${CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
 

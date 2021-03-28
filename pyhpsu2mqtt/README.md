@@ -6,7 +6,7 @@ This addon provides [pyHPSU](https://github.com/Spanni26/pyHPSU) with MQTT bi-di
 pyHPSU is a python toolbox to communicate with a Rotex/Daikin Heat Pump via CAN Bus (J13). 
 Tested hardware is Raspberry Pi 4b with a PiCAN 2 Hat. ELM327 did not work for me.
 
-You can pull many different variables (flow, pressure, temperatures, statistics etc) from the Rotex,
+You can read many different variables (flow, pressure, temperatures, statistics etc) from the Rotex,
 and you can also control it by writing variables (e.g. you can raise the target hot water temp for a few 
 seconds to trigger water heating with heat pump instead of the one-hot option which uses the inefficient 
 electrical heating rod). Variables and commands are passed via MQTT, so you need to have an MQTT broker 
@@ -19,7 +19,7 @@ If you know how to only limit access to `can0` differently, let me know.
 
 # Hardware Setup
 
-For this to work you need to have a Raspberry Pi 2,3,4 with PiCAN 2 Hat and a running Home Assistant
+For this to work you need to have a Raspberry Pi with PiCAN 2 Hat and a running Home Assistant
 on the same device. First setup the PiCAN hat according to its [documentation](https://raspberry-valley.azurewebsites.net/ref/Raspberry-Pi-PICAN2-Hat-User-Guide.pdf )
 and pyHPSU [README](https://github.com/Spanni26/pyHPSU/blob/master/README.md) and reboot. For this you need
 access to the host OS:
@@ -62,10 +62,6 @@ Should be "PYCAN", let me know if you have success connecting an ELM327.
 ### pyhpsu_port (str)
 
 Should be empty for PYCAN device. For ELM327 this should be the TTY/USB device. 
-
-### pyhpsu_lang (str)
-
-Select language (probably not necessary for MQTT communication, default EN)
 
 ### mqtt_broker (str)
 
@@ -111,7 +107,7 @@ These jobs must be entered as a list of dictionaries as command and interval pai
     interval: 10
 ```
 to obtain the domestic hot water temperature (t_dhw) and current temperature (t_hs) of the heat generator every 10 seconds. 
-Results are written to MQTT as /rotex/t_dhw and /rotex/t_hs with there respective values as payloads.  
+Results are written to MQTT as /rotex/t_dhw and /rotex/t_hs with their respective values as payloads.  
 
 
 # Home Assistant
@@ -159,9 +155,9 @@ in automations.yaml:
 This will check at 19:00 if warm water temp is below 46 (done to reduce unnecessary write operations). 
 It will then set the dhw setpoint1 to 51 degrees, triggering the pump to go into hot water mode. It will
 then reset the dhw setpoint1 to 48 degrees, which is the default for the rest of the day. You can also 
-attach a lovelace button to this automation to quickly make hot water before returning home if you
-expect that several people want to take a shower soon. The advantage here is that no electric heating 
+attach a lovelace button to this automation to quickly make hot water before returning home.
+The advantage here is that no electric heating 
 rod is used (unless the heat pump exceeds the timelimit before reaching the target temp, which is
-usually 50 mins by default - I set mine to 60 min to avoid using the heting rod at all for warm water).
+usually 50 mins by default).
 
 
