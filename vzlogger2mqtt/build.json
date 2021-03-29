@@ -1,0 +1,6 @@
+{
+  "build_from": {
+    "armhf": "homeassistant/armhf-base:3.12",
+    "armv7": "homeassistant/armvz-base:3.12"
+  }
+}
