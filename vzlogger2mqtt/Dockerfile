@@ -15,7 +15,7 @@ RUN apk add --no-cache \
 # build vzlogger (need to remove -Werror for vzlogger.cpp invalid conversion warning)
 RUN git clone https://github.com/volkszaehler/libsml.git \
     && cd libsml && make && make install && cd .. \
-    && git clone -b avoid_GLOB_BRACE https://github.com/r00t-/vzlogger.git \
+    && git clone https://github.com/volkszaehler/vzlogger.git \
     && cd vzlogger \
     && sed -i "s/-Werror/ /g" "./modules/CompilerFlags.cmake" \
     && cmake . -DBUILD_TEST=off -DSML_HOME=../libsml/sml \
