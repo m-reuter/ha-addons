@@ -55,7 +55,7 @@ echo
 cat vzlogger.conf
 echo
 
-/vzlogger/src/vzlogger --config /vzlogger.conf > /out.txt
+/vzlogger/src/vzlogger --foreground --config /vzlogger.conf > /out.txt
 echo out.txt:
 echo
 cat /out.txt
