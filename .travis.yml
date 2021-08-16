@@ -1,13 +1,20 @@
-services:
-  - docker
+dist: bionic
 before_install:
+  - sudo rm -rf /var/lib/apt/lists/*
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) edge"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+#services:
+#  - docker
+#before_install:
   - sudo apt-get install jq
   - chmod u+x build.sh
   - docker pull multiarch/qemu-user-static
   # As of March 2021 for docker to work with the alpine arm images, we need a newer libseccomp on host (at least 2.4.2)
   #   https://wiki.alpinelinux.org/wiki/Release_Notes_for_Alpine_3.13.0#time64_requirements
-  - wget http://ftp.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.5.1-1_amd64.deb
-  - sudo dpkg -i "libseccomp2_2.5.1-1_amd64.deb"
+  #- wget http://ftp.debian.org/debian/pool/main/libs/libseccomp/libseccomp2_2.5.1-1_amd64.deb
+  #- sudo dpkg -i "libseccomp2_2.5.1-1_amd64.deb"
 env:
   - ADDON="pyhpsu2mqtt"
   - ADDON="vzlogger2mqtt"
