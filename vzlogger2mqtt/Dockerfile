@@ -42,14 +42,6 @@ RUN git clone https://github.com/volkszaehler/vzlogger.git --depth 1 \
  && make \
  && make install
 
-# build vzlogger (need to remove -Werror for vzlogger.cpp invalid conversion warning)
-#RUN git clone https://github.com/volkszaehler/libsml.git \
-#    && cd libsml && make && make install && cd .. \
-#    && git clone https://github.com/volkszaehler/vzlogger.git \
-#    && cd vzlogger \
-#    && sed -i "s/-Werror/ /g" "./modules/CompilerFlags.cmake" \
-#    && cmake . -DBUILD_TEST=off -DSML_HOME=../libsml/sml \
-#    && make && make install
 
 # Create final and small Image
 FROM $BUILD_FROM
