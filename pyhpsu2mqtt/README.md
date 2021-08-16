@@ -160,4 +160,8 @@ The advantage here is that no electric heating
 rod is used (unless the heat pump exceeds the timelimit before reaching the target temp, which is
 usually 50 mins by default).
 
+# Thanks ...
+
+Thanks for your interest in this project! If you like it and it is useful to you, you can now buy me a coffee:
+https://www.buymeacoffee.com/mreuter 
 
