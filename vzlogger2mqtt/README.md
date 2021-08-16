@@ -81,3 +81,7 @@ Will read the total consumption (using agg: max) and the current consumption (us
 Iskraemeco MT176. More details can be found on the volkszaehler and vzlogger pages:
 https://wiki.volkszaehler.org/software/controller/vzlogger/overview_en 
 
+# Thanks ...
+
+Thanks for your interest in this project! If you like it and it is useful to you, you can now buy me a coffee:
+https://www.buymeacoffee.com/mreuter
