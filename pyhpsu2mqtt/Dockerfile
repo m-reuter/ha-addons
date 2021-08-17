@@ -12,6 +12,7 @@ RUN apk add --no-cache \
     && pip3 install \
         --no-cache-dir \
         --prefer-binary \
+        wheel \
         python-can \
         serial \
         paho-mqtt \
