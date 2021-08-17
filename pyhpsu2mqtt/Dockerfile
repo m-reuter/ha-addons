@@ -9,17 +9,29 @@ RUN apk add --no-cache \
     git \
     python3 \
     py3-pip \
-    && pip3 install --no-cache --upgrade pip setuptools wheel \
-    && pip3 install python-can serial paho-mqtt pika requests urllib3
-
-# install pyHPSU
-RUN cd /opt \
+    && pip3 install \
+        --no-cache-dir \
+        --prefer-binary \
+        python-can \
+        serial \
+        paho-mqtt \
+        pika \
+        requests \
+        urllib3 \
+    && find /usr/local \
+        \( -type d -a -name test -o -name tests -o -name '__pycache__' \) \
+        -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
+        -exec rm -rf '{}' + \
+    \
+    && cd /opt \
     && git clone https://github.com/Spanni26/pyHPSU.git \
     && cd pyHPSU \
     && git fetch origin pull/44/head:mqtt \
     && git checkout mqtt \
     && chmod +x install.sh \
     && sh install.sh
+#    && pip3 install --no-cache --upgrade pip setuptools wheel  # not sure this was needed. 
+
 
 # Copy data for add-on
 COPY pyhpsu.conf /
