@@ -9,10 +9,17 @@ RUN apk add --no-cache \
     git \
     python3 \
     py3-pip \
+    \
     && pip3 install \
         --no-cache-dir \
         --prefer-binary \
+        --upgrade \
+        pip \
+        setuptools \
         wheel \
+    && pip3 install \
+        --no-cache-dir \
+        --prefer-binary \
         python-can \
         serial \
         paho-mqtt \
@@ -31,8 +38,6 @@ RUN apk add --no-cache \
     && git checkout mqtt \
     && chmod +x install.sh \
     && sh install.sh
-#    && pip3 install --no-cache --upgrade pip setuptools wheel  # not sure this was needed. 
-
 
 # Copy data for add-on
 COPY pyhpsu.conf /
