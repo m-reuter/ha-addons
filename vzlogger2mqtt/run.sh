@@ -55,10 +55,11 @@ echo
 cat vzlogger.conf
 echo
 
-/usr/local/bin/vzlogger --foreground --config /vzlogger.conf > /out.txt
-echo out.txt:
-echo
-cat /out.txt
+echo "CMD: /usr/local/bin/vzlogger --foreground --config /vzlogger.conf"
+/usr/local/bin/vzlogger --foreground --config /vzlogger.conf
+#echo out.txt:
+#echo
+#cat /out.txt
 echo
 echo vzlogger.log:
 echo
