@@ -39,6 +39,10 @@ MQTT password to access broker (you should setup your broker to require this!)
 
 Prefix for MQTT topic to send information (default: vzlogger/data)
 
+### mqtt_timestamp (bol)
+
+Add Timestamp to MQTT message (default: false)
+
 ### meter_protocol (str)
 
 Protocol for meter, currently only sml
@@ -54,6 +58,10 @@ Baudrate for meter (default: 9600)
 ### meter_aggtime (int)
 
 Time in seconds to aggregate meter data before sending (default: 10)
+
+### meter_interval (int)
+
+Time in seconds between accesing a pull meter in seconds. Make sure that the time for the meter to respond is sufficient, even at low read speeds. Recommendatation for push-meters: "-1".
 
 ### meter_device (str)
 

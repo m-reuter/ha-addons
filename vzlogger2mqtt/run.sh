@@ -2,18 +2,20 @@
 
 CONFIG_PATH=/data/options.json
 
-# Settings for pyhpsu.conf
+# Settings for vzlogger.conf
 VERBOSITY="$(bashio::config 'verbosity')"
 MQTT_BROKER="$(bashio::config 'mqtt_broker')"
 MQTT_PORT="$(bashio::config 'mqtt_port')"
 MQTT_USERNAME="$(bashio::config 'mqtt_username')"
 MQTT_PASSWORD="$(bashio::config 'mqtt_password')"
 MQTT_TOPIC="$(bashio::config 'mqtt_topic')"
+MQTT_TOPIC="$(bashio::config 'mqtt_timestamp')"
 
 METER_PROTOCOL="$(bashio::config 'meter_protocol')"
 METER_PARITY="$(bashio::config 'meter_parity')"
 METER_BAUDRATE="$(bashio::config 'meter_baudrate')"
 METER_AGGTIME="$(bashio::config 'meter_aggtime')"
+METER_INTERVAL="$(bashio::config 'meter_aggtime')"
 METER_DEVICE="$(bashio::config 'meter_device')"
 METER_DEVICE2="$(bashio::config 'meter_device2')"
 
@@ -28,7 +30,7 @@ then
   METER_ENABLED2="true"
 fi
 
-# Replace in pyhpsu.conf
+# Replace in vzlogger.conf
 echo "Initializing vzlogger configuration ..."
 
 sed -i "s/{verbosity}/${VERBOSITY}/g" "vzlogger.conf"
@@ -37,11 +39,13 @@ sed -i "s/{mqtt_port}/${MQTT_PORT}/g" "vzlogger.conf"
 sed -i "s/{mqtt_username}/${MQTT_USERNAME}/g" "vzlogger.conf"
 sed -i "s/{mqtt_password}/${MQTT_PASSWORD}/g" "vzlogger.conf"
 sed -i "s#{mqtt_topic}#${MQTT_TOPIC}#g" "vzlogger.conf"
+sed -i "s#{mqtt_timestamp}#${MQTT_TIMESTAMP}#g" "vzlogger.conf"
 
 sed -i "s/{meter_protocol}/${METER_PROTOCOL}/g" "vzlogger.conf"
 sed -i "s/{meter_parity}/${METER_PARITY}/g" "vzlogger.conf"
 sed -i "s/{meter_baudrate}/${METER_BAUDRATE}/g" "vzlogger.conf"
 sed -i "s/{meter_aggtime}/${METER_AGGTIME}/g" "vzlogger.conf"
+sed -i "s/{meter_interval}/${METER_INTERVAL}/g" "vzlogger.conf"
 sed -i "s#{meter_device}#${METER_DEVICE}#g" "vzlogger.conf"
 sed -i "s/{meter_enabled2}/${METER_ENABLED2}/g" "vzlogger.conf"
 sed -i "s#{meter_device2}#${METER_DEVICE2}#g" "vzlogger.conf"
