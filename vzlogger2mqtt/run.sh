@@ -28,7 +28,8 @@ METER2_DEVICE="$(bashio::config 'meter2_device')"
 
 
 #CLEN =$(jq '.channels | length' /data/options.json)
-MMETER1_CHANNELS=$(jq -r 'if .meter1_channels then [.meter1_channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
+METER1_CHANNELS=$(jq -r 'if .meter1_channels then [.meter1_channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
+METER2_CHANNELS=$(jq -r 'if .meter2_channels then [.meter2_channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
 #echo "$CHANNELS"
 
 METER2_ENABLED="false"
@@ -57,10 +58,9 @@ sed -i "s/{meter1_baudrate}/${METER1_BAUDRATE}/g" "vzlogger.conf"
 sed -i "s/{meter1_aggtime}/${METER1_AGGTIME}/g" "vzlogger.conf"
 sed -i "s/{meter1_interval}/${METER1_INTERVAL}/g" "vzlogger.conf"
 sed -i "s#{meter1_device}#${METER1_DEVICE}#g" "vzlogger.conf"
+sed -i "s/{meter1_channels}/${METER1_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
 
-
-sed -i "s/{meter1_channels}/${MMETER1_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 #Meter 2 options
 sed -i "s/{meter2_enabled}/${METER2_ENABLED}/g" "vzlogger.conf"
 sed -i "s#{meter2_device}#${METER2_DEVICE}#g" "vzlogger.conf"
@@ -69,6 +69,7 @@ sed -i "s/{meter2_parity}/${METER2_PARITY}/g" "vzlogger.conf"
 sed -i "s/{meter2_baudrate}/${METER2_BAUDRATE}/g" "vzlogger.conf"
 sed -i "s/{meter2_aggtime}/${METER2_AGGTIME}/g" "vzlogger.conf"
 sed -i "s/{meter2_interval}/${METER2_INTERVAL}/g" "vzlogger.conf"
+sed -i "s/{meter1_channels}/${METER2_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
 
 echo

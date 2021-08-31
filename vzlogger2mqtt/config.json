@@ -1,6 +1,6 @@
 {
   "name": "vzlogger to MQTT Gateway",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "slug": "vzlogger2mqtt",
   "description": "vzlogger - Read your Smart Meter",
   "url": "https://github.com/seppelw/ha-addons/tree/master/vzlogger2mqtt",
