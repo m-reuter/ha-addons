@@ -69,7 +69,7 @@ sed -i "s/{meter2_parity}/${METER2_PARITY}/g" "vzlogger.conf"
 sed -i "s/{meter2_baudrate}/${METER2_BAUDRATE}/g" "vzlogger.conf"
 sed -i "s/{meter2_aggtime}/${METER2_AGGTIME}/g" "vzlogger.conf"
 sed -i "s/{meter2_interval}/${METER2_INTERVAL}/g" "vzlogger.conf"
-sed -i "s/{meter1_channels}/${METER2_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
+sed -i "s/{meter2_channels}/${METER2_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
 
 echo
