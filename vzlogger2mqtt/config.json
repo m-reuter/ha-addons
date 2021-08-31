@@ -64,5 +64,6 @@
     "meter2_channels" : [
       { "identifier": "str", "aggmode": "str" }
     ]
-  }
+  },
+  "image": "mreuter/{arch}-vzlogger2mqtt"
 }
