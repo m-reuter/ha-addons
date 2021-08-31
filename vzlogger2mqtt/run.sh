@@ -31,7 +31,7 @@ MMETER1_CHANNELS=$(jq -r 'if .meter1_channels then [.meter1_channels[] | "{\n   
 #echo "$CHANNELS"
 
 METER_ENABLED2="false"
-if [[ ! -z $METER_DEVICE2 ]]
+if [[ ! -z $METER2_DEVICE ]]
 then
   echo "Enabling second meter ... "
   METER2_ENABLED="true"
