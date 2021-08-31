@@ -1,5 +1,5 @@
 {
     "name": "Home Assistant seppel_w based on m-reuter Add-ons",
-    "url": "https://github.com/seppelw/ha-addons",
-    "maintainer": "seppelw"
+    "url": "https://github.com/m-reuter/ha-addons",
+    "maintainer": "m-reuter"
 }
