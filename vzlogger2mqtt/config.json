@@ -1,9 +1,9 @@
 {
   "name": "vzlogger to MQTT Gateway",
-  "version": "0.9.6",
+  "version": "0.9.1",
   "slug": "vzlogger2mqtt",
   "description": "vzlogger - Read your Smart Meter",
-  "url": "https://github.com/seppelw/ha-addons/tree/master/vzlogger2mqtt",
+  "url": "https://github.com/m-reuter/ha-addons/tree/master/vzlogger2mqtt",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
   "_arch": ["armv7"],
   "startup": "system",
@@ -21,7 +21,7 @@
     "meter1_parity": "8N1",
     "meter1_baudrate": 9600,
     "meter1_aggtime": 10,
-    "meter1_interval": 10,
+    "meter1_interval": 0,
     "meter1_device" : "",
     "meter1_channels" : [
       { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
@@ -30,7 +30,7 @@
     "meter2_protocol": "sml",
     "meter2_parity": "8N1",
     "meter2_baudrate": 9600,
-    "meter2_aggtime": 10,
+    "meter2_aggtime": 0,
     "meter2_interval": 10,
     "meter2_device" : "",
     "meter2_channels" : [

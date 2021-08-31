@@ -43,35 +43,34 @@ Prefix for MQTT topic to send information (default: vzlogger/data)
 
 Add Timestamp to MQTT message (default: false)
 
-### meter_protocol (str)
+### meter1_protocol / meter2_protocol (str)
 
 Protocol for meter, currently only sml
 
-### meter_parity (str)
+### meter1_parity / meter2_parity (str)
 
 Parity setting for meter (default: 8N1)
 
-### meter_baudrate (int)
+### meter1_baudrate / meter2_baudrate (int)
 
 Baudrate for meter (default: 9600)
 
-### meter_aggtime (int)
+### meter1_aggtime / meter2_aggtime (int)
 
 Time in seconds to aggregate meter data before sending (default: 10)
 
-### meter_interval (int)
+### meter1_interval / meter2_interval (int)
 
 Time in seconds between accesing a pull meter in seconds. Make sure that the time for the meter to respond is sufficient, even at low read speeds. Recommendatation for push-meters: "-1".
 
-### meter_device (str)
+### meter1_device (str)
 
 Device name for IR reader on host OS, e.g.:
 `/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_D1234567A-if00-port0`
 
-### meter_device2 (str)
+### meter2_device (str)
 
-Second device if available. Currently only max of 2 identical devices are supported,
-this means that meter settings (protocol, parity, ... and channel info) need to be identical.
+Second device if available. Currently only max of 2 devices are supported.
 
 ### channels (list of dict)
 
