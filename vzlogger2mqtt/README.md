@@ -45,7 +45,7 @@ Add Timestamp to MQTT message (default: false)
 
 ### meter1_protocol / meter2_protocol (str)
 
-Protocol for meter, currently only sml
+Protocol for meter, currently only sml and d0 are confirmed working
 
 ### meter1_parity / meter2_parity (str)
 
