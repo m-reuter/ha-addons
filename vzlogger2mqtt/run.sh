@@ -26,11 +26,12 @@ METER2_INTERVAL="$(bashio::config 'meter2_interval')"
 METER2_DEVICE="$(bashio::config 'meter2_device')"
 
 
+
 #CLEN =$(jq '.channels | length' /data/options.json)
 MMETER1_CHANNELS=$(jq -r 'if .meter1_channels then [.meter1_channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
 #echo "$CHANNELS"
 
-METER_ENABLED2="false"
+METER2_ENABLED="false"
 if [[ ! -z $METER2_DEVICE ]]
 then
   echo "Enabling second meter ... "
