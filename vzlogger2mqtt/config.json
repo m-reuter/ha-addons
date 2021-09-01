@@ -30,8 +30,8 @@
     "meter2_protocol": "sml",
     "meter2_parity": "8N1",
     "meter2_baudrate": 9600,
-    "meter2_aggtime": 0,
-    "meter2_interval": 10,
+    "meter2_aggtime": 10,
+    "meter2_interval": 0,
     "meter2_device" : "",
     "meter2_channels" : [
       { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
