@@ -72,7 +72,7 @@ Device name for IR reader on host OS, e.g.:
 
 Second device if available. Currently only max of 2 devices are supported.
 
-### channels (list of dict)
+### meter1_channels / meter2_channels (list of dict)
 
 Here you specify the identifiers that you want to read from the smart meter and how to
 aggregate values, e.g.:
