@@ -2,51 +2,74 @@
 
 CONFIG_PATH=/data/options.json
 
-# Settings for pyhpsu.conf
+# Settings for vzlogger.conf
 VERBOSITY="$(bashio::config 'verbosity')"
 MQTT_BROKER="$(bashio::config 'mqtt_broker')"
 MQTT_PORT="$(bashio::config 'mqtt_port')"
 MQTT_USERNAME="$(bashio::config 'mqtt_username')"
 MQTT_PASSWORD="$(bashio::config 'mqtt_password')"
 MQTT_TOPIC="$(bashio::config 'mqtt_topic')"
+MQTT_TIMESTAMP="$(bashio::config 'mqtt_timestamp')"
 
-METER_PROTOCOL="$(bashio::config 'meter_protocol')"
-METER_PARITY="$(bashio::config 'meter_parity')"
-METER_BAUDRATE="$(bashio::config 'meter_baudrate')"
-METER_AGGTIME="$(bashio::config 'meter_aggtime')"
-METER_DEVICE="$(bashio::config 'meter_device')"
-METER_DEVICE2="$(bashio::config 'meter_device2')"
+METER1_PROTOCOL="$(bashio::config 'meter1_protocol')"
+METER1_PARITY="$(bashio::config 'meter1_parity')"
+METER1_BAUDRATE="$(bashio::config 'meter1_baudrate')"
+METER1_AGGTIME="$(bashio::config 'meter1_aggtime')"
+METER1_INTERVAL="$(bashio::config 'meter1_interval')"
+METER1_DEVICE="$(bashio::config 'meter1_device')"
+
+METER2_PROTOCOL="$(bashio::config 'meter2_protocol')"
+METER2_PARITY="$(bashio::config 'meter2_parity')"
+METER2_BAUDRATE="$(bashio::config 'meter2_baudrate')"
+METER2_AGGTIME="$(bashio::config 'meter2_aggtime')"
+METER2_INTERVAL="$(bashio::config 'meter2_interval')"
+METER2_DEVICE="$(bashio::config 'meter2_device')"
+
+
 
 #CLEN =$(jq '.channels | length' /data/options.json)
-CHANNELS=$(jq -r 'if .channels then [.channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
+METER1_CHANNELS=$(jq -r 'if .meter1_channels then [.meter1_channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
+METER2_CHANNELS=$(jq -r 'if .meter2_channels then [.meter2_channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
 #echo "$CHANNELS"
 
-METER_ENABLED2="false"
-if [[ ! -z $METER_DEVICE2 ]]
+METER2_ENABLED="false"
+if [[ ! -z $METER2_DEVICE ]]
 then
   echo "Enabling second meter ... "
-  METER_ENABLED2="true"
+  METER2_ENABLED="true"
 fi
 
-# Replace in pyhpsu.conf
+# Replace in vzlogger.conf
 echo "Initializing vzlogger configuration ..."
 
+#MQTT options
 sed -i "s/{verbosity}/${VERBOSITY}/g" "vzlogger.conf"
 sed -i "s/{mqtt_broker}/${MQTT_BROKER}/g" "vzlogger.conf"
 sed -i "s/{mqtt_port}/${MQTT_PORT}/g" "vzlogger.conf"
 sed -i "s/{mqtt_username}/${MQTT_USERNAME}/g" "vzlogger.conf"
 sed -i "s/{mqtt_password}/${MQTT_PASSWORD}/g" "vzlogger.conf"
 sed -i "s#{mqtt_topic}#${MQTT_TOPIC}#g" "vzlogger.conf"
+sed -i "s#{mqtt_timestamp}#${MQTT_TIMESTAMP}#g" "vzlogger.conf"
 
-sed -i "s/{meter_protocol}/${METER_PROTOCOL}/g" "vzlogger.conf"
-sed -i "s/{meter_parity}/${METER_PARITY}/g" "vzlogger.conf"
-sed -i "s/{meter_baudrate}/${METER_BAUDRATE}/g" "vzlogger.conf"
-sed -i "s/{meter_aggtime}/${METER_AGGTIME}/g" "vzlogger.conf"
-sed -i "s#{meter_device}#${METER_DEVICE}#g" "vzlogger.conf"
-sed -i "s/{meter_enabled2}/${METER_ENABLED2}/g" "vzlogger.conf"
-sed -i "s#{meter_device2}#${METER_DEVICE2}#g" "vzlogger.conf"
+#Meter 1 options
+sed -i "s/{meter1_protocol}/${METER1_PROTOCOL}/g" "vzlogger.conf"
+sed -i "s/{meter1_parity}/${METER1_PARITY}/g" "vzlogger.conf"
+sed -i "s/{meter1_baudrate}/${METER1_BAUDRATE}/g" "vzlogger.conf"
+sed -i "s/{meter1_aggtime}/${METER1_AGGTIME}/g" "vzlogger.conf"
+sed -i "s/{meter1_interval}/${METER1_INTERVAL}/g" "vzlogger.conf"
+sed -i "s#{meter1_device}#${METER1_DEVICE}#g" "vzlogger.conf"
+sed -i "s/{meter1_channels}/${METER1_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
-sed -i "s/{channels}/${CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
+
+#Meter 2 options
+sed -i "s/{meter2_enabled}/${METER2_ENABLED}/g" "vzlogger.conf"
+sed -i "s#{meter2_device}#${METER2_DEVICE}#g" "vzlogger.conf"
+sed -i "s/{meter2_protocol}/${METER2_PROTOCOL}/g" "vzlogger.conf"
+sed -i "s/{meter2_parity}/${METER2_PARITY}/g" "vzlogger.conf"
+sed -i "s/{meter2_baudrate}/${METER2_BAUDRATE}/g" "vzlogger.conf"
+sed -i "s/{meter2_aggtime}/${METER2_AGGTIME}/g" "vzlogger.conf"
+sed -i "s/{meter2_interval}/${METER2_INTERVAL}/g" "vzlogger.conf"
+sed -i "s/{meter2_channels}/${METER2_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
 
 echo
