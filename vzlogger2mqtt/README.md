@@ -7,12 +7,14 @@ communication as a HomeAssistant Add-On.
 vzlogger is a program to interact with smart electrical meters via SML and an IR interface. 
 You can read current usage and overall usage from some smart meters, but may have to 
 request a PIN (from the electricity provider) to unlock detailled information from your
-smart meter. 
+smart meter. One advantage of having this as an Add-On is that HomeAssistant can simply 
+restart the Add-On if gets stuck (e.g. via an automation that checks if it gets continuous
+readings or not). 
 
 
 # Configuration
 
-These parameters will populate the vzlogger.conf:
+These parameters will populate the vzlogger.conf. Not all parameters are supported. For more info see also [vzlogger parameters (ger)] (https://wiki.volkszaehler.org/software/controller/vzlogger/vzlogger_conf_parameter)
 
 ### verbosity (int)
 
@@ -55,13 +57,21 @@ Parity setting for meter (default: 8N1)
 
 Baudrate for meter (default: 9600)
 
+### meter1_pullseq / meter2_pullseq (str)
+
+Init sequence for pull meters (default "")
+
+### meter1_ackseq / meter2_ackseq (str)
+
+Sequence to recieve data in pull meter (default "")
+
 ### meter1_aggtime / meter2_aggtime (int)
 
 Time in seconds to aggregate meter data before sending (default: 10)
 
 ### meter1_interval / meter2_interval (int)
 
-Time in seconds between accesing a pull meter in seconds. Make sure that the time for the meter to respond is sufficient, even at low read speeds. Recommendatation for push-meters: "-1".
+Time in seconds between accessing a pull meter in seconds. Make sure that the time for the meter to respond is sufficient, even at low read speeds. Recommendatation for push-meters: "-1".
 
 ### meter1_device (str)
 
