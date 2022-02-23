@@ -1,6 +1,6 @@
 {
   "name": "pyHPSU to MQTT Gateway",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "slug": "pyhpsu2mqtt",
   "description": "pyHPSU - Connect via CAN bus to ROTEX/Daikin Heat Pump",
   "url": "https://github.com/m-reuter/ha-addons/tree/master/pyhpsu2mqtt",
