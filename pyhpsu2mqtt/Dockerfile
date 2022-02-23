@@ -4,6 +4,7 @@ FROM $BUILD_FROM
 ENV LANG C.UTF-8
 
 # install packages
+# eventually pull pyhpsu master once mqtt is merged from testing
 RUN apk add --no-cache \
     ca-certificates \
     git \
