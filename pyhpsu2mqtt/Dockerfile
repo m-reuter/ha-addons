@@ -34,7 +34,7 @@ RUN apk add --no-cache \
     && cd /opt \
     && git clone https://github.com/Spanni26/pyHPSU.git \
     && cd pyHPSU \
-    && git fetch origin pull/44/head:mqtt \
+    && git fetch origin pull/51/head:mqtt \
     && git checkout mqtt \
     && chmod +x install.sh \
     && sh install.sh
