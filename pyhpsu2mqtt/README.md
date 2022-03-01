@@ -17,6 +17,10 @@ Security rating of this Add-on:
 In order for this Add-on to access the `can0` interface (PiCAN 2 hat) of the host, `--network host` is needed. 
 If you know how to only limit access to `can0` differently, let me know. 
 
+Rotex Heat Pump Settings: 
+If you want to optimize your heat pump take a look at https://m-reuter.github.io/Rotex-Daikin-WP with an introduction
+into the topic and recommended settings (in German). 
+
 # Hardware Setup
 
 For this to work you need to have a Raspberry Pi with PiCAN 2 Hat and a running Home Assistant
