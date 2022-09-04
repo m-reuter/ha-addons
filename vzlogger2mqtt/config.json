@@ -6,6 +6,7 @@
   "url": "https://github.com/m-reuter/ha-addons/tree/master/vzlogger2mqtt",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
   "_arch": ["armv7"],
+  "init": false,
   "startup": "system",
   "boot": "auto",
   "uart": true,
