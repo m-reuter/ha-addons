@@ -20,10 +20,12 @@
     "meter1_protocol": "sml",
     "meter1_parity": "8N1",
     "meter1_baudrate": 9600,
+    "meter1_baudrate_read": 9600,
     "meter1_pullseq": "",
     "meter1_ackseq": "",
     "meter1_aggtime": 10,
     "meter1_interval": 0,
+    "meter1_read_timeout": 10,
     "meter1_device": "",
     "meter1_channels" : [
       { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
@@ -32,10 +34,12 @@
     "meter2_protocol": "sml",
     "meter2_parity": "8N1",
     "meter2_baudrate": 9600,
+    "meter2_baudrate_read": 9600,
     "meter2_pullseq": "",
     "meter2_ackseq": "",
     "meter2_aggtime": 10,
     "meter2_interval": 0,
+    "meter2_read_timeout": 10,
     "meter2_device": "",
     "meter2_channels" : [
       { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
@@ -53,10 +57,12 @@
     "meter1_protocol": "str",
     "meter1_parity": "str",
     "meter1_baudrate": "int",
+    "meter1_baudrate_read": "int",
     "meter1_pullseq": "str?",
     "meter1_ackseq": "str?",
     "meter1_aggtime": "int",
     "meter1_interval": "int",
+    "meter1_read_timeout": "int",
     "meter1_device": "str",
     "meter1_channels" : [
       { "identifier": "str", "aggmode": "str" }
@@ -64,10 +70,12 @@
     "meter2_protocol": "str",
     "meter2_parity": "str?",
     "meter2_baudrate": "int?",
+    "meter2_baudrate_read": "int",
     "meter2_pullseq": "str?",
     "meter2_ackseq": "str?",
     "meter2_aggtime": "int?",
     "meter2_interval": "int?",
+    "meter2_read_timeout": "int",
     "meter2_device": "str?",
     "meter2_channels" : [
       { "identifier": "str", "aggmode": "str" }
