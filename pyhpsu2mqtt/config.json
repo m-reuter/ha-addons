@@ -8,6 +8,7 @@
   "startup": "system",
   "boot": "auto",
   "host_network": true,
+  "init": false,
   "options": {
     "pyhpsu_device": "PYCAN",
     "pyhpsu_port": "",
