@@ -9,6 +9,7 @@
   "startup": "system",
   "boot": "auto",
   "uart": true,
+  "init": false,
   "options": {
     "verbosity": 3,
     "mqtt_broker": "127.0.0.1",
