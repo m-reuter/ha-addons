@@ -77,6 +77,7 @@ Time in seconds between accessing a pull meter in seconds. Make sure that the ti
 
 Device name for IR reader on host OS, e.g.:
 `/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_D1234567A-if00-port0`
+Recommendation: use by-id instead of the ttyUSBx directly as that can get assigned differently, e.g. after a reboot. The ID is fixed until you change the device hardware itself. 
 
 ### meter2_device (str)
 
