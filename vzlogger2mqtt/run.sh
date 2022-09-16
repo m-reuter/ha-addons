@@ -20,6 +20,7 @@ METER1_ACKSEQ="$(bashio::config 'meter1_ackseq')"
 METER1_AGGTIME="$(bashio::config 'meter1_aggtime')"
 METER1_INTERVAL="$(bashio::config 'meter1_interval')"
 METER1_READ_TIMEOUT="$(bashio::config 'meter1_read_timeout')"
+METER1_USE_LOCAL_TIME="$(bashio::config 'meter1_use_local_time')"
 METER1_DEVICE="$(bashio::config 'meter1_device')"
 
 METER2_PROTOCOL="$(bashio::config 'meter2_protocol')"
@@ -31,6 +32,7 @@ METER2_ACKSEQ="$(bashio::config 'meter2_ackseq')"
 METER2_AGGTIME="$(bashio::config 'meter2_aggtime')"
 METER2_INTERVAL="$(bashio::config 'meter2_interval')"
 METER2_READ_TIMEOUT="$(bashio::config 'meter2_read_timeout')"
+METER2_USE_LOCAL_TIME="$(bashio::config 'meter2_use_local_time')"
 METER2_DEVICE="$(bashio::config 'meter2_device')"
 
 
@@ -69,6 +71,7 @@ sed -i "s/{meter1_ackseq}/${METER1_ACKSEQ}/g" "vzlogger.conf"
 sed -i "s/{meter1_aggtime}/${METER1_AGGTIME}/g" "vzlogger.conf"
 sed -i "s/{meter1_interval}/${METER1_INTERVAL}/g" "vzlogger.conf"
 sed -i "s/{meter1_read_timeout}/${METER1_READ_TIMEOUT}/g" "vzlogger.conf"
+sed -i "s/{meter1_use_local_time}/${METER1_USE_LOCAL_TIME}/g" "vzlogger.conf"
 sed -i "s#{meter1_device}#${METER1_DEVICE}#g" "vzlogger.conf"
 sed -i "s/{meter1_channels}/${METER1_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
@@ -85,6 +88,7 @@ sed -i "s/{meter2_ackseq}/${METER2_ACKSEQ}/g" "vzlogger.conf"
 sed -i "s/{meter2_aggtime}/${METER2_AGGTIME}/g" "vzlogger.conf"
 sed -i "s/{meter2_interval}/${METER2_INTERVAL}/g" "vzlogger.conf"
 sed -i "s/{meter2_read_timeout}/${METER2_READ_TIMEOUT}/g" "vzlogger.conf"
+sed -i "s/{meter2_use_local_time}/${METER2_USE_LOCAL_TIME}/g" "vzlogger.conf"
 sed -i "s/{meter2_channels}/${METER2_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
 
 

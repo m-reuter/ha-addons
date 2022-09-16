@@ -1,6 +1,6 @@
 {
   "name": "vzlogger to MQTT Gateway",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "slug": "vzlogger2mqtt",
   "description": "vzlogger - Read your Smart Meter",
   "url": "https://github.com/m-reuter/ha-addons/tree/master/vzlogger2mqtt",
@@ -27,6 +27,7 @@
     "meter1_aggtime": 10,
     "meter1_interval": 0,
     "meter1_read_timeout": 10,
+    "meter1_use_local_time": "false",
     "meter1_device": "",
     "meter1_channels" : [
       { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
@@ -41,6 +42,7 @@
     "meter2_aggtime": 10,
     "meter2_interval": 0,
     "meter2_read_timeout": 10,
+    "meter2_use_local_time": "false",
     "meter2_device": "",
     "meter2_channels" : [
       { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
@@ -64,6 +66,7 @@
     "meter1_aggtime": "int",
     "meter1_interval": "int",
     "meter1_read_timeout": "int",
+    "meter1_use_local_time": "bool",
     "meter1_device": "str",
     "meter1_channels" : [
       { "identifier": "str", "aggmode": "str" }
@@ -77,6 +80,7 @@
     "meter2_aggtime": "int?",
     "meter2_interval": "int?",
     "meter2_read_timeout": "int",
+    "meter2_use_local_time": "bool",
     "meter2_device": "str?",
     "meter2_channels" : [
       { "identifier": "str", "aggmode": "str" }

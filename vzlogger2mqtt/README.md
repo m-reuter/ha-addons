@@ -57,6 +57,10 @@ Parity setting for meter (default: 8N1)
 
 Baudrate for meter (default: 9600)
 
+### meter1_baudrate_read / meter2_baudrate_read
+
+Pull meter may permit higher read rates, default: use same as baudrate above. 300 should always work.
+
 ### meter1_pullseq / meter2_pullseq (str)
 
 Init sequence for pull meters (default "")
@@ -72,6 +76,14 @@ Time in seconds to aggregate meter data before sending (default: 10)
 ### meter1_interval / meter2_interval (int)
 
 Time in seconds between accessing a pull meter in seconds. Make sure that the time for the meter to respond is sufficient, even at low read speeds. Recommendatation for push-meters: "-1".
+
+### meter1_read_timeout / meter2_read_timeout
+
+Time in seconds after which the logger times out (default: 10)
+
+### meter1_use_local_time / meter2_use_local_time
+
+True: use local time instead the one send from the meter (default: False)
 
 ### meter1_device (str)
 
