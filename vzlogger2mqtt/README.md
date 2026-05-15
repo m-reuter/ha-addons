@@ -1,6 +1,6 @@
 # vzlogger to MQTT Add-on
 
-[![Build](https://github.com/m-reuter/ha-addons/actions/workflows/build-vzlogger2mqtt.yml/badge.svg)](https://github.com/m-reuter/ha-addons/actions/workflows/build-vzlogger2mqtt.yml)
+[![CI](https://github.com/m-reuter/ha-addons/actions/workflows/ci-vzlogger2mqtt.yml/badge.svg)](https://github.com/m-reuter/ha-addons/actions/workflows/ci-vzlogger2mqtt.yml)
 
 This addon provides [vzlogger](https://github.com/volkszaehler/vzlogger) with MQTT
 communication as a HomeAssistant Add-On.
@@ -14,7 +14,7 @@ readings or not).
 # Configuration
 
 These parameters will populate the vzlogger.conf. Not all parameters are supported. For more info see
-also [vzlogger parameters (ger)] (https://wiki.volkszaehler.org/software/controller/vzlogger/vzlogger_conf_parameter)
+also [vzlogger parameters (ger)](https://wiki.volkszaehler.org/software/controller/vzlogger/vzlogger_conf_parameter)
 
 ### verbosity (int)
 
