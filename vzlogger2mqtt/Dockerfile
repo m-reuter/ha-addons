@@ -67,7 +67,6 @@ COPY --from=builder /usr/local/bin/vzlogger /usr/local/bin/vzlogger
 COPY --from=builder /usr/local/lib/libmbus.so* /usr/local/lib/
 
 # Copy data for add-on
-COPY vzlogger.conf /
 COPY run.sh /
 RUN chmod a+x /run.sh
 

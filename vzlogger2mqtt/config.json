@@ -93,16 +93,16 @@
         "aggmode": "str"
       }
     ],
-    "meter2_protocol": "str",
+    "meter2_protocol": "str?",
     "meter2_parity": "str?",
     "meter2_baudrate": "int?",
-    "meter2_baudrate_read": "int",
+    "meter2_baudrate_read": "int?",
     "meter2_pullseq": "str?",
     "meter2_ackseq": "str?",
     "meter2_aggtime": "int?",
     "meter2_interval": "int?",
-    "meter2_read_timeout": "int",
-    "meter2_use_local_time": "bool",
+    "meter2_read_timeout": "int?",
+    "meter2_use_local_time": "bool?",
     "meter2_device": "str?",
     "meter2_channels": [
       {

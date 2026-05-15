@@ -1,8 +1,6 @@
 #!/usr/bin/with-contenv bashio
 
-CONFIG_PATH=/data/options.json
-
-# Settings for vzlogger.conf
+# ── MQTT settings ────────────────────────────────────────────────────────────
 VERBOSITY="$(bashio::config 'verbosity')"
 MQTT_BROKER="$(bashio::config 'mqtt_broker')"
 MQTT_PORT="$(bashio::config 'mqtt_port')"
@@ -11,100 +9,171 @@ MQTT_PASSWORD="$(bashio::config 'mqtt_password')"
 MQTT_TOPIC="$(bashio::config 'mqtt_topic')"
 MQTT_TIMESTAMP="$(bashio::config 'mqtt_timestamp')"
 
+# ── Meter 1 settings ─────────────────────────────────────────────────────────
 METER1_PROTOCOL="$(bashio::config 'meter1_protocol')"
 METER1_PARITY="$(bashio::config 'meter1_parity')"
 METER1_BAUDRATE="$(bashio::config 'meter1_baudrate')"
 METER1_BAUDRATE_READ="$(bashio::config 'meter1_baudrate_read')"
-METER1_PULLSEQ="$(bashio::config 'meter1_pullseq')"
-METER1_ACKSEQ="$(bashio::config 'meter1_ackseq')"
+METER1_PULLSEQ="$(bashio::config 'meter1_pullseq' '')"
+METER1_ACKSEQ="$(bashio::config 'meter1_ackseq' '')"
 METER1_AGGTIME="$(bashio::config 'meter1_aggtime')"
 METER1_INTERVAL="$(bashio::config 'meter1_interval')"
 METER1_READ_TIMEOUT="$(bashio::config 'meter1_read_timeout')"
 METER1_USE_LOCAL_TIME="$(bashio::config 'meter1_use_local_time')"
 METER1_DEVICE="$(bashio::config 'meter1_device')"
 
-METER2_PROTOCOL="$(bashio::config 'meter2_protocol')"
-METER2_PARITY="$(bashio::config 'meter2_parity')"
-METER2_BAUDRATE="$(bashio::config 'meter2_baudrate')"
-METER2_BAUDRATE_READ="$(bashio::config 'meter2_baudrate_read')"
-METER2_PULLSEQ="$(bashio::config 'meter2_pullseq')"
-METER2_ACKSEQ="$(bashio::config 'meter2_ackseq')"
-METER2_AGGTIME="$(bashio::config 'meter2_aggtime')"
-METER2_INTERVAL="$(bashio::config 'meter2_interval')"
-METER2_READ_TIMEOUT="$(bashio::config 'meter2_read_timeout')"
-METER2_USE_LOCAL_TIME="$(bashio::config 'meter2_use_local_time')"
-METER2_DEVICE="$(bashio::config 'meter2_device')"
+# null → empty string for optional fields
+[[ "$METER1_PULLSEQ" == "null" ]] && METER1_PULLSEQ=""
+[[ "$METER1_ACKSEQ"  == "null" ]] && METER1_ACKSEQ=""
 
+# ── Build meter1 channels JSON array ─────────────────────────────────────────
+METER1_CHANNELS=$(jq '[.meter1_channels[] | {uuid: "1", api: "null", identifier: .identifier, aggmode: .aggmode}]' /data/options.json)
 
+# ── Build meter1 config object ───────────────────────────────────────────────
+METER1_OBJ=$(jq -n \
+    --arg     protocol       "$METER1_PROTOCOL"      \
+    --arg     device         "$METER1_DEVICE"         \
+    --arg     parity         "$METER1_PARITY"         \
+    --argjson baudrate       "$METER1_BAUDRATE"       \
+    --argjson baudrate_read  "$METER1_BAUDRATE_READ"  \
+    --arg     pullseq        "$METER1_PULLSEQ"        \
+    --arg     ackseq         "$METER1_ACKSEQ"         \
+    --argjson aggtime        "$METER1_AGGTIME"        \
+    --argjson interval       "$METER1_INTERVAL"       \
+    --argjson read_timeout   "$METER1_READ_TIMEOUT"   \
+    --argjson use_local_time "$METER1_USE_LOCAL_TIME" \
+    --argjson channels       "$METER1_CHANNELS"       \
+    '{
+        protocol:         $protocol,
+        enabled:          true,
+        device:           $device,
+        parity:           $parity,
+        baudrate:         $baudrate,
+        baudrate_read:    $baudrate_read,
+        pullseq:          $pullseq,
+        ackseq:           $ackseq,
+        aggtime:          $aggtime,
+        interval:         $interval,
+        read_timeout:     $read_timeout,
+        aggfixedinterval: true,
+        duplicates:       60,
+        use_local_time:   $use_local_time,
+        channels:         $channels
+    }')
 
-#CLEN =$(jq '.channels | length' /data/options.json)
-METER1_CHANNELS=$(jq -r 'if .meter1_channels then [.meter1_channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
-METER2_CHANNELS=$(jq -r 'if .meter2_channels then [.meter2_channels[] | "{\n           \"uuid\": \"1\", \n           \"api\": \"null\", \n           \"identifier\": \""+.identifier+"\", \n           \"aggmode\": \""+.aggmode+"\" }" ] | join(",\n         ") else "" end' /data/options.json)
-#echo "$CHANNELS"
+# ── Optionally build meter2 ───────────────────────────────────────────────────
+METER2_DEVICE="$(bashio::config 'meter2_device' '')"
+[[ "$METER2_DEVICE" == "null" ]] && METER2_DEVICE=""
 
-METER2_ENABLED="false"
-if [[ ! -z $METER2_DEVICE ]]
-then
-  echo "Enabling second meter ... "
-  METER2_ENABLED="true"
+if [[ -n "$METER2_DEVICE" ]]; then
+    echo "Enabling second meter ..."
+
+    METER2_PROTOCOL="$(bashio::config 'meter2_protocol')"
+    METER2_PARITY="$(bashio::config 'meter2_parity')"
+    METER2_BAUDRATE="$(bashio::config 'meter2_baudrate')"
+    METER2_BAUDRATE_READ="$(bashio::config 'meter2_baudrate_read')"
+    METER2_PULLSEQ="$(bashio::config 'meter2_pullseq' '')"
+    METER2_ACKSEQ="$(bashio::config 'meter2_ackseq' '')"
+    METER2_AGGTIME="$(bashio::config 'meter2_aggtime')"
+    METER2_INTERVAL="$(bashio::config 'meter2_interval')"
+    METER2_READ_TIMEOUT="$(bashio::config 'meter2_read_timeout')"
+    METER2_USE_LOCAL_TIME="$(bashio::config 'meter2_use_local_time')"
+
+    [[ "$METER2_PULLSEQ" == "null" ]] && METER2_PULLSEQ=""
+    [[ "$METER2_ACKSEQ"  == "null" ]] && METER2_ACKSEQ=""
+
+    METER2_CHANNELS=$(jq '[.meter2_channels[] | {uuid: "1", api: "null", identifier: .identifier, aggmode: .aggmode}]' /data/options.json)
+
+    METER2_OBJ=$(jq -n \
+        --arg     protocol       "$METER2_PROTOCOL"      \
+        --arg     device         "$METER2_DEVICE"         \
+        --arg     parity         "$METER2_PARITY"         \
+        --argjson baudrate       "$METER2_BAUDRATE"       \
+        --argjson baudrate_read  "$METER2_BAUDRATE_READ"  \
+        --arg     pullseq        "$METER2_PULLSEQ"        \
+        --arg     ackseq         "$METER2_ACKSEQ"         \
+        --argjson aggtime        "$METER2_AGGTIME"        \
+        --argjson interval       "$METER2_INTERVAL"       \
+        --argjson read_timeout   "$METER2_READ_TIMEOUT"   \
+        --argjson use_local_time "$METER2_USE_LOCAL_TIME" \
+        --argjson channels       "$METER2_CHANNELS"       \
+        '{
+            protocol:         $protocol,
+            enabled:          true,
+            device:           $device,
+            parity:           $parity,
+            baudrate:         $baudrate,
+            baudrate_read:    $baudrate_read,
+            pullseq:          $pullseq,
+            ackseq:           $ackseq,
+            aggtime:          $aggtime,
+            interval:         $interval,
+            read_timeout:     $read_timeout,
+            aggfixedinterval: true,
+            duplicates:       60,
+            use_local_time:   $use_local_time,
+            channels:         $channels
+        }')
+
+    METERS=$(jq -n --argjson m1 "$METER1_OBJ" --argjson m2 "$METER2_OBJ" '[$m1, $m2]')
+else
+    METERS=$(jq -n --argjson m1 "$METER1_OBJ" '[$m1]')
 fi
 
-# Replace in vzlogger.conf
-echo "Initializing vzlogger configuration ..."
+# ── Generate /vzlogger.conf ───────────────────────────────────────────────────
+echo "Generating vzlogger configuration ..."
 
-#MQTT options
-sed -i "s/{verbosity}/${VERBOSITY}/g" "vzlogger.conf"
-sed -i "s/{mqtt_broker}/${MQTT_BROKER}/g" "vzlogger.conf"
-sed -i "s/{mqtt_port}/${MQTT_PORT}/g" "vzlogger.conf"
-sed -i "s/{mqtt_username}/${MQTT_USERNAME}/g" "vzlogger.conf"
-sed -i "s/{mqtt_password}/${MQTT_PASSWORD}/g" "vzlogger.conf"
-sed -i "s#{mqtt_topic}#${MQTT_TOPIC}#g" "vzlogger.conf"
-sed -i "s#{mqtt_timestamp}#${MQTT_TIMESTAMP}#g" "vzlogger.conf"
-
-#Meter 1 options
-sed -i "s/{meter1_protocol}/${METER1_PROTOCOL}/g" "vzlogger.conf"
-sed -i "s/{meter1_parity}/${METER1_PARITY}/g" "vzlogger.conf"
-sed -i "s/{meter1_baudrate}/${METER1_BAUDRATE}/g" "vzlogger.conf"
-sed -i "s/{meter1_baudrate_read}/${METER1_BAUDRATE_READ}/g" "vzlogger.conf"
-sed -i "s/{meter1_pullseq}/${METER1_PULLSEQ}/g" "vzlogger.conf"
-sed -i "s/{meter1_ackseq}/${METER1_ACKSEQ}/g" "vzlogger.conf"
-sed -i "s/{meter1_aggtime}/${METER1_AGGTIME}/g" "vzlogger.conf"
-sed -i "s/{meter1_interval}/${METER1_INTERVAL}/g" "vzlogger.conf"
-sed -i "s/{meter1_read_timeout}/${METER1_READ_TIMEOUT}/g" "vzlogger.conf"
-sed -i "s/{meter1_use_local_time}/${METER1_USE_LOCAL_TIME}/g" "vzlogger.conf"
-sed -i "s#{meter1_device}#${METER1_DEVICE}#g" "vzlogger.conf"
-sed -i "s/{meter1_channels}/${METER1_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
-
-
-#Meter 2 options
-sed -i "s/{meter2_enabled}/${METER2_ENABLED}/g" "vzlogger.conf"
-sed -i "s#{meter2_device}#${METER2_DEVICE}#g" "vzlogger.conf"
-sed -i "s/{meter2_protocol}/${METER2_PROTOCOL}/g" "vzlogger.conf"
-sed -i "s/{meter2_parity}/${METER2_PARITY}/g" "vzlogger.conf"
-sed -i "s/{meter2_baudrate}/${METER2_BAUDRATE}/g" "vzlogger.conf"
-sed -i "s/{meter2_baudrate_read}/${METER2_BAUDRATE_READ}/g" "vzlogger.conf"
-sed -i "s/{meter2_pullseq}/${METER2_PULLSEQ}/g" "vzlogger.conf"
-sed -i "s/{meter2_ackseq}/${METER2_ACKSEQ}/g" "vzlogger.conf"
-sed -i "s/{meter2_aggtime}/${METER2_AGGTIME}/g" "vzlogger.conf"
-sed -i "s/{meter2_interval}/${METER2_INTERVAL}/g" "vzlogger.conf"
-sed -i "s/{meter2_read_timeout}/${METER2_READ_TIMEOUT}/g" "vzlogger.conf"
-sed -i "s/{meter2_use_local_time}/${METER2_USE_LOCAL_TIME}/g" "vzlogger.conf"
-sed -i "s/{meter2_channels}/${METER2_CHANNELS//$'\n'/\\n}/g" "vzlogger.conf"
-
+jq -n \
+    --argjson verbosity  "$VERBOSITY"    \
+    --arg     broker     "$MQTT_BROKER"  \
+    --argjson port       "$MQTT_PORT"    \
+    --arg     username   "$MQTT_USERNAME" \
+    --arg     password   "$MQTT_PASSWORD" \
+    --arg     topic      "$MQTT_TOPIC"   \
+    --argjson timestamp  "$MQTT_TIMESTAMP" \
+    --argjson meters     "$METERS"       \
+    '{
+        retry:     10,
+        daemon:    true,
+        verbosity: $verbosity,
+        log:       "/vzlogger.log",
+        local: {
+            enabled: false,
+            port:    8081,
+            index:   true,
+            timeout: 30,
+            buffer:  600
+        },
+        mqtt: {
+            enabled:   true,
+            host:      $broker,
+            port:      $port,
+            cafile:    "",
+            capath:    "",
+            certfile:  "",
+            keyfile:   "",
+            keypass:   "",
+            keepalive: 30,
+            topic:     $topic,
+            user:      $username,
+            pass:      $password,
+            retain:    false,
+            rawAndAgg: false,
+            qos:       0,
+            timestamp: $timestamp
+        },
+        meters: $meters
+    }' > /vzlogger.conf
 
 echo
-echo vzlogger.conf: 
+echo "vzlogger.conf:"
 echo
-cat vzlogger.conf
+cat /vzlogger.conf
 echo
 
 echo "CMD: /usr/local/bin/vzlogger --foreground --config /vzlogger.conf"
 /usr/local/bin/vzlogger --foreground --config /vzlogger.conf
-#echo out.txt:
-#echo
-#cat /out.txt
 echo
-echo vzlogger.log:
+echo "vzlogger.log:"
 echo
 cat /vzlogger.log
-
