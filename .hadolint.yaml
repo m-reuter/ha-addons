@@ -3,7 +3,9 @@
 #   DL3006 - ARG-based FROM is standard HA addon practice
 #   DL3018 - apk version pinning not practical with HA base images
 #   DL3013 - pip version pinning not enforced for addon runtime deps
-ignore:
+#   DL3003 - cd within a single RUN layer is intentional
+ignored:
   - DL3006
   - DL3018
   - DL3013
+  - DL3003

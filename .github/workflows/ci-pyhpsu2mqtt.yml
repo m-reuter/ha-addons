@@ -30,7 +30,11 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: pyhpsu2mqtt/Dockerfile
-          config: .hadolint.yaml
+          # DL3006: ARG-based FROM is standard HA addon practice
+          # DL3018: apk version pinning impractical with HA base images
+          # DL3013: pip version pinning not enforced for addon runtime deps
+          # DL3003: cd within a single RUN layer is intentional here
+          ignore: DL3006 DL3018 DL3013 DL3003
 
   build-amd64:
     name: Build amd64 (no push)

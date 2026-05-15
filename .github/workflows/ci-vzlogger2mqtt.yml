@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint vzlogger2mqtt
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,10 +30,13 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: vzlogger2mqtt/Dockerfile
-          config: .hadolint.yaml
+          # DL3006: ARG-based FROM is standard HA addon practice
+          # DL3018: apk version pinning impractical with HA base images
+          # DL3003: cd within a single RUN layer is intentional here
+          ignore: DL3006 DL3018 DL3003
 
   build-amd64:
-    name: Build vzlogger2mqtt amd64 (no push)
+    name: Build amd64 (no push)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

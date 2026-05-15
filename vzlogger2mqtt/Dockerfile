@@ -46,7 +46,7 @@ RUN git clone https://github.com/volkszaehler/vzlogger.git --depth 1 --branch v0
 # Create final and small Image
 FROM $BUILD_FROM
 
-LABEL Description="vzlogger"
+LABEL description="vzlogger"
 
 RUN apk add --no-cache \
     libcurl \
