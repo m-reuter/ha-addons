@@ -91,8 +91,17 @@ if [[ -n "$METER2_DEVICE" ]]; then
     METER2_READ_TIMEOUT="$(bashio::config 'meter2_read_timeout')"
     METER2_USE_LOCAL_TIME="$(bashio::config 'meter2_use_local_time')"
 
-    [[ "$METER2_PULLSEQ" == "null" ]] && METER2_PULLSEQ=""
-    [[ "$METER2_ACKSEQ"  == "null" ]] && METER2_ACKSEQ=""
+    # Apply defaults for optional fields that may come back as "null"
+    [[ "$METER2_PROTOCOL"       == "null" ]] && METER2_PROTOCOL="sml"
+    [[ "$METER2_PARITY"         == "null" ]] && METER2_PARITY="8N1"
+    [[ "$METER2_BAUDRATE"       == "null" ]] && METER2_BAUDRATE=9600
+    [[ "$METER2_BAUDRATE_READ"  == "null" ]] && METER2_BAUDRATE_READ=9600
+    [[ "$METER2_PULLSEQ"        == "null" ]] && METER2_PULLSEQ=""
+    [[ "$METER2_ACKSEQ"         == "null" ]] && METER2_ACKSEQ=""
+    [[ "$METER2_AGGTIME"        == "null" ]] && METER2_AGGTIME=10
+    [[ "$METER2_INTERVAL"       == "null" ]] && METER2_INTERVAL=0
+    [[ "$METER2_READ_TIMEOUT"   == "null" ]] && METER2_READ_TIMEOUT=10
+    [[ "$METER2_USE_LOCAL_TIME" == "null" ]] && METER2_USE_LOCAL_TIME=false
 
     METER2_CHANNELS=$(jq '[(.meter2_channels // [])[] | {uuid: "1", api: "null", identifier: .identifier, aggmode: .aggmode}]' /data/options.json)
 
