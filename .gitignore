@@ -1,0 +1,8 @@
+# macOS / IntelliJ
+.idea/
+*.iml
+.DS_Store
+
+# Agent tooling
+.agent-work/
+.agentbridge/

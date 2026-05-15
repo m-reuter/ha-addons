@@ -1,16 +1,16 @@
-name: Build vzlogger2mqtt
+name: Release pyhpsu2mqtt
 
 # Trigger manually from the GitHub Actions UI.
 # This allows building and pushing a release for a specific addon
 # independently of other addons in this repository.
 #
 # To release:
-#   1. Bump "version" in vzlogger2mqtt/config.json and commit/merge to master.
-#   2. Go to Actions → Build vzlogger2mqtt → Run workflow.
+#   1. Bump "version" in pyhpsu2mqtt/config.json and commit/merge to master.
+#   2. Go to Actions → Release pyhpsu2mqtt → Run workflow.
 #
 # Images are pushed to Docker Hub as:
-#   mreuter/{arch}-vzlogger2mqtt:{version}
-#   mreuter/{arch}-vzlogger2mqtt:latest
+#   mreuter/{arch}-pyhpsu2mqtt:{version}
+#   mreuter/{arch}-pyhpsu2mqtt:latest
 on:
   workflow_dispatch:
 
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [ amd64, aarch64, armv7, armhf ]
+        arch: [amd64, aarch64, armv7, armhf]
 
     steps:
       - name: Checkout
@@ -42,20 +42,20 @@ jobs:
       - name: Read build metadata
         id: meta
         run: |
-          VERSION=$(jq -r '.version' vzlogger2mqtt/config.json)
-          BUILD_FROM=$(jq -r ".build_from.${{ matrix.arch }}" vzlogger2mqtt/build.json)
+          VERSION=$(jq -r '.version' pyhpsu2mqtt/config.json)
+          BUILD_FROM=$(jq -r ".build_from.${{ matrix.arch }}" pyhpsu2mqtt/build.json)
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "build_from=${BUILD_FROM}" >> "$GITHUB_OUTPUT"
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: vzlogger2mqtt
+          context: pyhpsu2mqtt
           push: true
           tags: |
-            mreuter/${{ matrix.arch }}-vzlogger2mqtt:${{ steps.meta.outputs.version }}
-            mreuter/${{ matrix.arch }}-vzlogger2mqtt:latest
+            mreuter/${{ matrix.arch }}-pyhpsu2mqtt:${{ steps.meta.outputs.version }}
+            mreuter/${{ matrix.arch }}-pyhpsu2mqtt:latest
           build-args: |
             BUILD_FROM=${{ steps.meta.outputs.build_from }}
-          cache-from: type=gha,scope=${{ matrix.arch }}-vzlogger2mqtt
-          cache-to: type=gha,scope=${{ matrix.arch }}-vzlogger2mqtt,mode=max
+          cache-from: type=gha,scope=${{ matrix.arch }}-pyhpsu2mqtt
+          cache-to: type=gha,scope=${{ matrix.arch }}-pyhpsu2mqtt,mode=max
