@@ -101,7 +101,7 @@ Set timeout in seconds for canpi interface (default: 0.05)
 
 ### jobs (list of dict)
 
-pyHPSU jobs are commands that are passed to the heat pump in regular intervalls to read values and report back to MQTT.
+pyHPSU jobs are commands that are passed to the heat pump in regular intervals to read values and report back to MQTT.
 These jobs must be entered as a list of dictionaries as command and interval pairs, for example:
 
 ```
@@ -131,7 +131,7 @@ Writing to the heatpump (e.g. adjusting the setpoint1 of hot water) could be don
 in automations.yaml: 
 
 ```
-- id: 'make_warm_ater'
+- id: 'make_warm_water'
   alias: "Make Warm Water"
   trigger:
   - platform: time

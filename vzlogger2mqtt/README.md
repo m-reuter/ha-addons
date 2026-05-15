@@ -6,7 +6,7 @@ This addon provides [vzlogger](https://github.com/volkszaehler/vzlogger) with MQ
 communication as a HomeAssistant Add-On.
 vzlogger is a program to interact with smart electrical meters via SML and an IR interface.
 You can read current usage and overall usage from some smart meters, but may have to
-request a PIN (from the electricity provider) to unlock detailled information from your
+request a PIN (from the electricity provider) to unlock detailed information from your
 smart meter. One advantage of having this as an Add-On is that HomeAssistant can simply
 restart the Add-On if gets stuck (e.g. via an automation that checks if it gets continuous
 readings or not).
@@ -76,7 +76,7 @@ Init sequence for pull meters (default "")
 
 ### meter1_ackseq / meter2_ackseq (str)
 
-Sequence to recieve data in pull meter (default "")
+Sequence to receive data in pull meter (default "")
 
 ### meter1_aggtime / meter2_aggtime (int)
 
@@ -85,7 +85,7 @@ Time in seconds to aggregate meter data before sending (default: 10)
 ### meter1_interval / meter2_interval (int)
 
 Time in seconds between accessing a pull meter in seconds. Make sure that the time for the meter to respond is
-sufficient, even at low read speeds. Recommendatation for push-meters: "-1".
+sufficient, even at low read speeds. Recommendation for push-meters: "-1".
 
 ### meter1_read_timeout / meter2_read_timeout
 
