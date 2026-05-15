@@ -135,7 +135,7 @@ so Home Assistant can automatically restart the addon if it stops producing read
 For extra reliability, consider setting up an automation that restarts the addon when
 no MQTT messages have been received for a configurable period.
 
-**Recommendation:** always use a stable `by-id` path for `meter_device` (e.g.
+**Recommendation:** always use a stable `by-id` path for `meter1_device` / `meter2_device` (e.g.
 `/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_D1234567A-if00-port0`) rather than
 `/dev/ttyUSBx`, which can change between reboots.
 
