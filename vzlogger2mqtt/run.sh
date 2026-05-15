@@ -192,17 +192,27 @@ jq -n \
     }' > /vzlogger.conf
 
 echo
-echo "vzlogger.conf:"
+echo "vzlogger.conf (sensitive values redacted):"
 echo
-cat /vzlogger.conf
+jq '
+    .mqtt.pass |= if . == "" then . else "<redacted>" end
+    | .mqtt.keypass |= if . == "" then . else "<redacted>" end
+' /vzlogger.conf
 echo
 
 # Give the serial device time to finish enumerating after an HA restart
 sleep 3
 
+# Reset the log on each start so stale output does not accumulate across restarts.
+: > /vzlogger.log
+
 echo "CMD: /usr/local/bin/vzlogger --foreground --config /vzlogger.conf"
 /usr/local/bin/vzlogger --foreground --config /vzlogger.conf
 echo
-echo "vzlogger.log:"
-echo
-cat /vzlogger.log
+if [[ -f /vzlogger.log ]]; then
+    echo "vzlogger.log:"
+    echo
+    cat /vzlogger.log
+else
+    echo "vzlogger.log not found"
+fi
