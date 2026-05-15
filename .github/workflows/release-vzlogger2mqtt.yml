@@ -46,12 +46,19 @@ jobs:
           BUILD_FROM=$(jq -r ".build_from.${{ matrix.arch }}" vzlogger2mqtt/build.json)
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "build_from=${BUILD_FROM}" >> "$GITHUB_OUTPUT"
+          case "${{ matrix.arch }}" in
+            amd64)   echo "platform=linux/amd64"   >> "$GITHUB_OUTPUT" ;;
+            aarch64) echo "platform=linux/arm64"   >> "$GITHUB_OUTPUT" ;;
+            armv7)   echo "platform=linux/arm/v7"  >> "$GITHUB_OUTPUT" ;;
+            armhf)   echo "platform=linux/arm/v6"  >> "$GITHUB_OUTPUT" ;;
+          esac
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: vzlogger2mqtt
           push: true
+          platforms: ${{ steps.meta.outputs.platform }}
           tags: |
             mreuter/${{ matrix.arch }}-vzlogger2mqtt:${{ steps.meta.outputs.version }}
             mreuter/${{ matrix.arch }}-vzlogger2mqtt:latest
