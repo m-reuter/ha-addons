@@ -25,7 +25,7 @@
     "mqtt_username": "",
     "mqtt_password": "",
     "mqtt_topic": "vzlogger/data",
-    "mqtt_timestamp": "false",
+    "mqtt_timestamp": false,
     "mqtt_cafile": "",
     "mqtt_capath": "",
     "mqtt_certfile": "",
@@ -40,7 +40,7 @@
     "meter1_aggtime": 10,
     "meter1_interval": 0,
     "meter1_read_timeout": 10,
-    "meter1_use_local_time": "false",
+    "meter1_use_local_time": false,
     "meter1_device": "",
     "meter1_channels": [
       {
@@ -61,7 +61,7 @@
     "meter2_aggtime": 10,
     "meter2_interval": 0,
     "meter2_read_timeout": 10,
-    "meter2_use_local_time": "false",
+    "meter2_use_local_time": false,
     "meter2_device": "",
     "meter2_channels": [
       {

@@ -94,7 +94,7 @@ if [[ -n "$METER2_DEVICE" ]]; then
     [[ "$METER2_PULLSEQ" == "null" ]] && METER2_PULLSEQ=""
     [[ "$METER2_ACKSEQ"  == "null" ]] && METER2_ACKSEQ=""
 
-    METER2_CHANNELS=$(jq '[.meter2_channels[] | {uuid: "1", api: "null", identifier: .identifier, aggmode: .aggmode}]' /data/options.json)
+    METER2_CHANNELS=$(jq '[(.meter2_channels // [])[] | {uuid: "1", api: "null", identifier: .identifier, aggmode: .aggmode}]' /data/options.json)
 
     METER2_OBJ=$(jq -n \
         --arg     protocol       "$METER2_PROTOCOL"      \
