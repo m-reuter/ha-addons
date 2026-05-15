@@ -8,6 +8,18 @@ MQTT_USERNAME="$(bashio::config 'mqtt_username')"
 MQTT_PASSWORD="$(bashio::config 'mqtt_password')"
 MQTT_TOPIC="$(bashio::config 'mqtt_topic')"
 MQTT_TIMESTAMP="$(bashio::config 'mqtt_timestamp')"
+MQTT_CAFILE="$(bashio::config 'mqtt_cafile' '')"
+MQTT_CAPATH="$(bashio::config 'mqtt_capath' '')"
+MQTT_CERTFILE="$(bashio::config 'mqtt_certfile' '')"
+MQTT_KEYFILE="$(bashio::config 'mqtt_keyfile' '')"
+MQTT_KEYPASS="$(bashio::config 'mqtt_keypass' '')"
+
+# null → empty string for optional fields
+[[ "$MQTT_CAFILE"   == "null" ]] && MQTT_CAFILE=""
+[[ "$MQTT_CAPATH"   == "null" ]] && MQTT_CAPATH=""
+[[ "$MQTT_CERTFILE" == "null" ]] && MQTT_CERTFILE=""
+[[ "$MQTT_KEYFILE"  == "null" ]] && MQTT_KEYFILE=""
+[[ "$MQTT_KEYPASS"  == "null" ]] && MQTT_KEYPASS=""
 
 # ── Meter 1 settings ─────────────────────────────────────────────────────────
 METER1_PROTOCOL="$(bashio::config 'meter1_protocol')"
@@ -131,6 +143,11 @@ jq -n \
     --arg     password   "$MQTT_PASSWORD" \
     --arg     topic      "$MQTT_TOPIC"   \
     --argjson timestamp  "$MQTT_TIMESTAMP" \
+    --arg     cafile     "$MQTT_CAFILE"  \
+    --arg     capath     "$MQTT_CAPATH"  \
+    --arg     certfile   "$MQTT_CERTFILE" \
+    --arg     keyfile    "$MQTT_KEYFILE" \
+    --arg     keypass    "$MQTT_KEYPASS" \
     --argjson meters     "$METERS"       \
     '{
         retry:     10,
@@ -138,7 +155,7 @@ jq -n \
         verbosity: $verbosity,
         log:       "/vzlogger.log",
         local: {
-            enabled: false,
+            enabled: true,
             port:    8081,
             index:   true,
             timeout: 30,
@@ -148,11 +165,11 @@ jq -n \
             enabled:   true,
             host:      $broker,
             port:      $port,
-            cafile:    "",
-            capath:    "",
-            certfile:  "",
-            keyfile:   "",
-            keypass:   "",
+            cafile:    $cafile,
+            capath:    $capath,
+            certfile:  $certfile,
+            keyfile:   $keyfile,
+            keypass:   $keypass,
             keepalive: 30,
             topic:     $topic,
             user:      $username,
@@ -170,6 +187,9 @@ echo "vzlogger.conf:"
 echo
 cat /vzlogger.conf
 echo
+
+# Give the serial device time to finish enumerating after an HA restart
+sleep 3
 
 echo "CMD: /usr/local/bin/vzlogger --foreground --config /vzlogger.conf"
 /usr/local/bin/vzlogger --foreground --config /vzlogger.conf

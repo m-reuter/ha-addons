@@ -1,6 +1,6 @@
 {
   "name": "vzlogger to MQTT Gateway",
-  "version": "0.9.5",
+  "version": "1.0.0",
   "slug": "vzlogger2mqtt",
   "description": "vzlogger - Read your Smart Meter",
   "url": "https://github.com/m-reuter/ha-addons/tree/master/vzlogger2mqtt",
@@ -10,11 +10,12 @@
     "aarch64",
     "amd64"
   ],
-  "_arch": [
-    "armv7"
-  ],
   "startup": "system",
   "boot": "auto",
+  "watchdog": "http://[HOST]:[PORT:8081]/",
+  "ports": {
+    "8081/tcp": null
+  },
   "uart": true,
   "init": false,
   "options": {
@@ -25,6 +26,11 @@
     "mqtt_password": "",
     "mqtt_topic": "vzlogger/data",
     "mqtt_timestamp": "false",
+    "mqtt_cafile": "",
+    "mqtt_capath": "",
+    "mqtt_certfile": "",
+    "mqtt_keyfile": "",
+    "mqtt_keypass": "",
     "meter1_protocol": "sml",
     "meter1_parity": "8N1",
     "meter1_baudrate": 9600,
@@ -76,6 +82,11 @@
     "mqtt_password": "password?",
     "mqtt_topic": "str",
     "mqtt_timestamp": "bool",
+    "mqtt_cafile": "str?",
+    "mqtt_capath": "str?",
+    "mqtt_certfile": "str?",
+    "mqtt_keyfile": "str?",
+    "mqtt_keypass": "password?",
     "meter1_protocol": "str",
     "meter1_parity": "str",
     "meter1_baudrate": "int",
