@@ -4,8 +4,15 @@
   "slug": "vzlogger2mqtt",
   "description": "vzlogger - Read your Smart Meter",
   "url": "https://github.com/m-reuter/ha-addons/tree/master/vzlogger2mqtt",
-  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
-  "_arch": ["armv7"],
+  "arch": [
+    "armhf",
+    "armv7",
+    "aarch64",
+    "amd64"
+  ],
+  "_arch": [
+    "armv7"
+  ],
   "startup": "system",
   "boot": "auto",
   "uart": true,
@@ -29,9 +36,15 @@
     "meter1_read_timeout": 10,
     "meter1_use_local_time": "false",
     "meter1_device": "",
-    "meter1_channels" : [
-      { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
-      { "identifier": "1-0:1.8.0*255", "aggmode": "max" }
+    "meter1_channels": [
+      {
+        "identifier": "1-0:16.7.0*255",
+        "aggmode": "avg"
+      },
+      {
+        "identifier": "1-0:1.8.0*255",
+        "aggmode": "max"
+      }
     ],
     "meter2_protocol": "sml",
     "meter2_parity": "8N1",
@@ -44,9 +57,15 @@
     "meter2_read_timeout": 10,
     "meter2_use_local_time": "false",
     "meter2_device": "",
-    "meter2_channels" : [
-      { "identifier": "1-0:16.7.0*255", "aggmode": "avg" },
-      { "identifier": "1-0:1.8.0*255", "aggmode": "max" }
+    "meter2_channels": [
+      {
+        "identifier": "1-0:16.7.0*255",
+        "aggmode": "avg"
+      },
+      {
+        "identifier": "1-0:1.8.0*255",
+        "aggmode": "max"
+      }
     ]
   },
   "schema": {
@@ -56,7 +75,7 @@
     "mqtt_username": "str?",
     "mqtt_password": "password?",
     "mqtt_topic": "str",
-    "mqtt_timestamp":"bool",
+    "mqtt_timestamp": "bool",
     "meter1_protocol": "str",
     "meter1_parity": "str",
     "meter1_baudrate": "int",
@@ -68,8 +87,11 @@
     "meter1_read_timeout": "int",
     "meter1_use_local_time": "bool",
     "meter1_device": "str",
-    "meter1_channels" : [
-      { "identifier": "str", "aggmode": "str" }
+    "meter1_channels": [
+      {
+        "identifier": "str",
+        "aggmode": "str"
+      }
     ],
     "meter2_protocol": "str",
     "meter2_parity": "str?",
@@ -82,8 +104,11 @@
     "meter2_read_timeout": "int",
     "meter2_use_local_time": "bool",
     "meter2_device": "str?",
-    "meter2_channels" : [
-      { "identifier": "str", "aggmode": "str" }
+    "meter2_channels": [
+      {
+        "identifier": "str",
+        "aggmode": "str"
+      }
     ]
   },
   "image": "mreuter/{arch}-vzlogger2mqtt"

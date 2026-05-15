@@ -25,18 +25,18 @@ RUN apk add --no-cache \
 WORKDIR /vzlogger
 
 # build libsml
-RUN git clone https://github.com/volkszaehler/libsml.git --depth 1 \
+RUN git clone https://github.com/volkszaehler/libsml.git --depth 1 --branch v1.1.5 \
  && make install -C libsml/sml
 
 # build libmbus
-RUN git clone https://github.com/rscada/libmbus.git --depth 1 \
+RUN git clone https://github.com/rscada/libmbus.git --depth 1 --branch 0.9.0 \
  && cd libmbus \
  && ./build.sh \
  && make install \
  && cd ..
 
 # build vzlogger
-RUN git clone https://github.com/volkszaehler/vzlogger.git --depth 1 \
+RUN git clone https://github.com/volkszaehler/vzlogger.git --depth 1 --branch v0.8.9 \
  && cd vzlogger \
  && cmake . -DBUILD_TEST=off \
  && make \
@@ -59,7 +59,6 @@ RUN apk add --no-cache \
     libltdl \
     libatomic \
     json-c \
-    leptonica \
     mosquitto-dev \
     libunistring
 
