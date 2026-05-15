@@ -1,4 +1,4 @@
-name: CI
+name: CI vzlogger2mqtt
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint vzlogger2mqtt
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,9 +30,10 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: vzlogger2mqtt/Dockerfile
+          config: .hadolint.yaml
 
   build-amd64:
-    name: Build amd64 (no push)
+    name: Build vzlogger2mqtt amd64 (no push)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -1,7 +1,5 @@
 #!/usr/bin/with-contenv bashio
 
-CONFIG_PATH=/data/options.json
-
 # Settings for pyhpsu.conf
 PYHPSU_DEVICE="$(bashio::config 'pyhpsu_device')"
 PYHPSU_PORT="$(bashio::config 'pyhpsu_port')"

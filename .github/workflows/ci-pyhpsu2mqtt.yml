@@ -30,6 +30,7 @@ jobs:
         uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: pyhpsu2mqtt/Dockerfile
+          config: .hadolint.yaml
 
   build-amd64:
     name: Build amd64 (no push)

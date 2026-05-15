@@ -1,5 +1,5 @@
 ARG BUILD_FROM
-FROM $BUILD_FROM as builder
+FROM $BUILD_FROM AS builder
 
 ENV LANG C.UTF-8
 
