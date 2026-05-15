@@ -1,4 +1,18 @@
 #!/bin/bash
+# build.sh — LOCAL BUILD HELPER (not used in CI/GitHub Actions workflow)
+#
+# This script uses the homeassistant/amd64-builder Docker image to build
+# addon images locally, mirroring what was previously done in Travis CI.
+# The GitHub Actions workflow (.github/workflows/build-vzlogger2mqtt.yml)
+# is used for all automated builds and Docker Hub releases.
+#
+# Usage (from repo root):
+#   ./build.sh vzlogger2mqtt         # build all arches
+#   ARCHS="--amd64" ./build.sh vzlogger2mqtt   # build amd64 only (faster)
+#   TEST="--test" ./build.sh vzlogger2mqtt      # dry-run without pushing
+#
+# Prerequisites: Docker must be running and you must be logged in to Docker Hub.
+#   docker login -u <your-username>
 set -ev
 echo "Addons: $@"
 archs="${ARCHS}"

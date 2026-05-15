@@ -1,11 +1,18 @@
 name: Build vzlogger2mqtt
 
+# Trigger manually from the GitHub Actions UI.
+# This allows building and pushing a release for a specific addon
+# independently of other addons in this repository.
+#
+# To release:
+#   1. Bump "version" in vzlogger2mqtt/config.json and commit/merge to master.
+#   2. Go to Actions → Build vzlogger2mqtt → Run workflow.
+#
+# Images are pushed to Docker Hub as:
+#   mreuter/{arch}-vzlogger2mqtt:{version}
+#   mreuter/{arch}-vzlogger2mqtt:latest
 on:
-  push:
-    branches: [master]
-    paths:
-      - "vzlogger2mqtt/**"
-      - ".github/workflows/build-vzlogger2mqtt.yml"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -14,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [amd64, aarch64, armv7, armhf]
+        arch: [ amd64, aarch64, armv7, armhf ]
 
     steps:
       - name: Checkout
