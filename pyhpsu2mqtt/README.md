@@ -1,5 +1,5 @@
 # pyHPSU to MQTT Add-on for ROTEX Heat Pumps
-[![Build Status](https://travis-ci.com/m-reuter/ha-addons.svg?branch=master)](https://travis-ci.com/m-reuter/ha-addons)
+[![CI](https://github.com/m-reuter/ha-addons/actions/workflows/ci-pyhpsu2mqtt.yml/badge.svg)](https://github.com/m-reuter/ha-addons/actions/workflows/ci-pyhpsu2mqtt.yml)
 
 This add-on provides [pyHPSU](https://github.com/Spanni26/pyHPSU) with MQTT bi-directional communication as a Home Assistant add-on.
 pyHPSU is a Python toolbox to communicate with a Rotex/Daikin heat pump via CAN bus (J13).
