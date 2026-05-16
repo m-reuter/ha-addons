@@ -1,0 +1,61 @@
+name: CI pyhpsu2mqtt
+
+on:
+  pull_request:
+    paths:
+      - "pyhpsu2mqtt/**"
+      - ".github/workflows/ci-pyhpsu2mqtt.yml"
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          jq empty pyhpsu2mqtt/config.json
+          jq empty pyhpsu2mqtt/build.json
+
+      - name: Shell syntax check
+        run: bash -n pyhpsu2mqtt/run.sh
+
+      - name: Shellcheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: pyhpsu2mqtt
+
+      - name: Hadolint (Dockerfile lint)
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: pyhpsu2mqtt/Dockerfile
+          # DL3006: ARG-based FROM is standard HA addon practice
+          # DL3018: apk version pinning impractical with HA base images
+          # DL3013: pip version pinning not enforced for addon runtime deps
+          # DL3003: cd within a single RUN layer is intentional here
+          ignore: DL3006 DL3018 DL3013 DL3003
+
+  build-amd64:
+    name: Build amd64 (no push)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Read BUILD_FROM for amd64
+        id: meta
+        run: |
+          echo "build_from=$(jq -r '.build_from.amd64' pyhpsu2mqtt/build.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Build (amd64 only, no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: pyhpsu2mqtt
+          push: false
+          build-args: |
+            BUILD_FROM=${{ steps.meta.outputs.build_from }}
+          cache-from: type=gha,scope=amd64-pyhpsu2mqtt
+          cache-to: type=gha,scope=amd64-pyhpsu2mqtt,mode=max

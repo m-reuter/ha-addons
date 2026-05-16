@@ -1,0 +1,68 @@
+name: Release pyhpsu2mqtt
+
+# Trigger manually from the GitHub Actions UI.
+# This allows building and pushing a release for a specific addon
+# independently of other addons in this repository.
+#
+# To release:
+#   1. Bump "version" in pyhpsu2mqtt/config.json and commit/merge to master.
+#   2. Go to Actions → Release pyhpsu2mqtt → Run workflow.
+#
+# Images are pushed to Docker Hub as:
+#   mreuter/{arch}-pyhpsu2mqtt:{version}
+#   mreuter/{arch}-pyhpsu2mqtt:latest
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, aarch64, armv7, armhf]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Read build metadata
+        id: meta
+        run: |
+          VERSION=$(jq -r '.version' pyhpsu2mqtt/config.json)
+          BUILD_FROM=$(jq -r ".build_from.${{ matrix.arch }}" pyhpsu2mqtt/build.json)
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "build_from=${BUILD_FROM}" >> "$GITHUB_OUTPUT"
+          case "${{ matrix.arch }}" in
+            amd64)   echo "platform=linux/amd64"   >> "$GITHUB_OUTPUT" ;;
+            aarch64) echo "platform=linux/arm64"   >> "$GITHUB_OUTPUT" ;;
+            armv7)   echo "platform=linux/arm/v7"  >> "$GITHUB_OUTPUT" ;;
+            armhf)   echo "platform=linux/arm/v6"  >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: pyhpsu2mqtt
+          push: true
+          platforms: ${{ steps.meta.outputs.platform }}
+          tags: |
+            mreuter/${{ matrix.arch }}-pyhpsu2mqtt:${{ steps.meta.outputs.version }}
+            mreuter/${{ matrix.arch }}-pyhpsu2mqtt:latest
+          build-args: |
+            BUILD_FROM=${{ steps.meta.outputs.build_from }}
+          cache-from: type=gha,scope=${{ matrix.arch }}-pyhpsu2mqtt
+          cache-to: type=gha,scope=${{ matrix.arch }}-pyhpsu2mqtt,mode=max

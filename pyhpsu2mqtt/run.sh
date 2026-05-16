@@ -1,7 +1,5 @@
 #!/usr/bin/with-contenv bashio
 
-CONFIG_PATH=/data/options.json
-
 # Settings for pyhpsu.conf
 PYHPSU_DEVICE="$(bashio::config 'pyhpsu_device')"
 PYHPSU_PORT="$(bashio::config 'pyhpsu_port')"
@@ -35,9 +33,9 @@ echo "Initializing pyhpsu configuration ..."
 cp pyhpsu.conf /etc/pyHPSU/pyhpsu.conf
 
 echo
-echo pyHPSU configuration:
+echo "pyHPSU configuration (sensitive values redacted):"
 echo
-cat pyhpsu.conf
+sed -E 's/^(PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf
 echo
 
 export PYTHONPATH="/usr/lib/python3/dist-packages"

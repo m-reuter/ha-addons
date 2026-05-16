@@ -1,5 +1,5 @@
 ARG BUILD_FROM
-FROM $BUILD_FROM as builder
+FROM $BUILD_FROM AS builder
 
 ENV LANG C.UTF-8
 
@@ -25,18 +25,18 @@ RUN apk add --no-cache \
 WORKDIR /vzlogger
 
 # build libsml
-RUN git clone https://github.com/volkszaehler/libsml.git --depth 1 \
+RUN git clone https://github.com/volkszaehler/libsml.git --depth 1 --branch v1.1.5 \
  && make install -C libsml/sml
 
 # build libmbus
-RUN git clone https://github.com/rscada/libmbus.git --depth 1 \
+RUN git clone https://github.com/rscada/libmbus.git --depth 1 --branch 0.9.0 \
  && cd libmbus \
  && ./build.sh \
  && make install \
  && cd ..
 
 # build vzlogger
-RUN git clone https://github.com/volkszaehler/vzlogger.git --depth 1 \
+RUN git clone https://github.com/volkszaehler/vzlogger.git --depth 1 --branch v0.8.9 \
  && cd vzlogger \
  && cmake . -DBUILD_TEST=off \
  && make \
@@ -46,7 +46,7 @@ RUN git clone https://github.com/volkszaehler/vzlogger.git --depth 1 \
 # Create final and small Image
 FROM $BUILD_FROM
 
-LABEL Description="vzlogger"
+LABEL description="vzlogger"
 
 RUN apk add --no-cache \
     libcurl \
@@ -59,7 +59,6 @@ RUN apk add --no-cache \
     libltdl \
     libatomic \
     json-c \
-    leptonica \
     mosquitto-dev \
     libunistring
 
@@ -68,7 +67,6 @@ COPY --from=builder /usr/local/bin/vzlogger /usr/local/bin/vzlogger
 COPY --from=builder /usr/local/lib/libmbus.so* /usr/local/lib/
 
 # Copy data for add-on
-COPY vzlogger.conf /
 COPY run.sh /
 RUN chmod a+x /run.sh
 
