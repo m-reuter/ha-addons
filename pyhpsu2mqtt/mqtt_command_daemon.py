@@ -12,6 +12,16 @@ import paho.mqtt.client as mqtt
 LOGGER = logging.getLogger("pyhpsu-mqtt-command-daemon")
 
 
+def make_client(client_id):
+    try:
+        return mqtt.Client(
+            callback_api_version=mqtt.CallbackAPIVersion.VERSION2,
+            client_id=client_id,
+        )
+    except (AttributeError, TypeError, ValueError):
+        return mqtt.Client(client_id=client_id)
+
+
 def load_config(path):
     config = configparser.ConfigParser()
     if not config.read(path):
@@ -95,7 +105,7 @@ def main():
     subscribe_topic = "/".join(part for part in (settings["prefix"], settings["command_topic"], "+") if part)
     client_id = f"{settings['clientname']}-mqttdaemon-{os.getpid()}"
 
-    client = mqtt.Client(client_id=client_id)
+    client = make_client(client_id)
     if settings["username"]:
         client.username_pw_set(settings["username"], settings["password"])
     client.user_data_set(
