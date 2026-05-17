@@ -1,7 +1,7 @@
-ARG BUILD_FROM
+ARG BUILD_FROM=homeassistant/amd64-base:3.18
 FROM $BUILD_FROM AS builder
 
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 # install packages
 RUN apk add --no-cache \
@@ -71,4 +71,3 @@ COPY run.sh /
 RUN chmod a+x /run.sh
 
 CMD [ "/run.sh" ]
-
