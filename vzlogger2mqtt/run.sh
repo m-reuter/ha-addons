@@ -33,7 +33,7 @@ configure_serial_device() {
     local databits="${parity:0:1}"
     local parity_mode="${parity:1:1}"
     local stopbits="${parity:2:1}"
-    local stty_args=(raw "$baudrate" -echo -ixon -ixoff -crtscts)
+    local stty_args=(raw "$baudrate" -echo -ixon -ixoff -crtscts clocal)
 
     case "$databits" in
         7) stty_args+=(cs7) ;;
