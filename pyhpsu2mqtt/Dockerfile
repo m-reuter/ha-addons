@@ -1,8 +1,8 @@
-ARG BUILD_FROM
+ARG BUILD_FROM=homeassistant/amd64-base:3.18
 FROM $BUILD_FROM
 ARG PYHPSU_REF=4fcb37d7c28c970073d720923c28dc781eb92a85
 
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 # install packages
 RUN apk add --no-cache \
