@@ -44,7 +44,8 @@ RUN apk add --no-cache \
 
 # Copy data for add-on
 COPY pyhpsu.conf /
+COPY mqtt_command_daemon.py /usr/local/bin/mqtt_command_daemon.py
 COPY run.sh /
-RUN chmod a+x /run.sh
+RUN chmod a+x /run.sh /usr/local/bin/mqtt_command_daemon.py
 
 CMD [ "/run.sh" ]

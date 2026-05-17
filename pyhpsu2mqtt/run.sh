@@ -38,5 +38,14 @@ echo
 sed -E 's/^([[:space:]]*PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf
 echo
 
+python3 /usr/local/bin/mqtt_command_daemon.py /etc/pyHPSU/pyhpsu.conf &
+MQTT_DAEMON_PID=$!
+
+cleanup() {
+    kill "${MQTT_DAEMON_PID}" 2>/dev/null || true
+}
+
+trap cleanup EXIT INT TERM
+
 export PYTHONPATH="/usr/lib/python3/dist-packages"
-pyHPSU.py --mqtt_daemon -a -o mqtt
+pyHPSU.py -a -o MQTT
