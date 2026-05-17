@@ -3,7 +3,7 @@
 
 This add-on provides [pyHPSU](https://github.com/Spanni26/pyHPSU) with MQTT bi-directional communication as a Home Assistant add-on.
 pyHPSU is a Python toolbox to communicate with a Rotex/Daikin heat pump via CAN bus (J13).
-Tested hardware is a Raspberry Pi 4B with a PiCAN 2 HAT. ELM327 did not work for me.
+Tested hardware includes Raspberry Pi systems with either a USB CAN adapter supported by the Linux `gs_usb` driver (for example a CANable/candleLight-compatible adapter) or a PiCAN 2 HAT. ELM327 did not work for me.
 
 You can read many different variables (flow, pressure, temperatures, statistics, and more) from the Rotex heat pump, and you can also control it by writing variables. For example, you can temporarily raise the hot water target temperature to trigger water heating with the heat pump instead of the less efficient electrical heating rod. Variables and commands are passed via MQTT, so you need an MQTT broker running in Home Assistant, for example the Mosquitto add-on.
 
@@ -19,12 +19,91 @@ Possible commands are available in the upstream pyHPSU project:
 
 ## Hardware setup
 
-For this add-on to work you need a Raspberry Pi with a PiCAN 2 HAT and a running Home Assistant instance on the same device. First set up the PiCAN HAT according to its [documentation](https://raspberry-valley.azurewebsites.net/ref/Raspberry-Pi-PICAN2-Hat-User-Guide.pdf) and the pyHPSU [README](https://github.com/Spanni26/pyHPSU/blob/master/README.md), then reboot.
+For this add-on you need a Raspberry Pi running Home Assistant and a working `can0` interface on the host OS. The add-on talks to the host CAN interface directly because it runs with host networking enabled.
+
+Before configuring the add-on, verify that the host can already talk to the heat pump:
+
+```bash
+ip -details link show type can
+ip -s -d link show can0
+```
+
+If `can0` is not up yet, bring it up manually:
+
+```bash
+sudo ip link set can0 down 2>/dev/null
+sudo ip link set can0 type can bitrate 20000
+sudo ip link set can0 up
+```
+
+After that, a quick smoke test with `candump` can confirm that the CAN interface is working while something is actively polling the heat pump, for example `pyHPSU`, the `pyhpsu2mqtt` add-on, or another CAN query tool:
+
+```bash
+candump -x -e can0
+```
+
+### USB CAN adapter (`gs_usb`, recommended on Bookworm)
+
+On current Raspberry Pi OS / Bookworm systems, a USB CAN adapter supported by the Linux `gs_usb` driver is often the easiest option. This includes candleLight/CANable-compatible adapters that show up as a `gs_usb` device.
+
+1. Plug in the adapter and confirm that Linux detects it:
+
+   ```bash
+   dmesg | grep -Ei 'gs_usb|canable|candle'
+   ```
+
+2. Bring up `can0` with bitrate `20000` as shown above.
+3. Start `candump -x -e can0`, then trigger traffic by running `pyHPSU`, starting the `pyhpsu2mqtt` add-on, or sending another known-good CAN query, and confirm that frames appear.
+
+If the adapter is detected but `cansend`/`candump` do not work reliably on Bookworm, updating the adapter to current candleLight firmware may help. Some older firmware revisions appear to behave badly with newer `gs_usb` stacks.
+
+To bring `can0` up automatically at boot and after a USB replug, use a small helper script with a templated `systemd` service plus a `udev` rule:
+
+```sh
+#!/bin/sh
+set -eu
+IFACE="${1:-can0}"
+/sbin/ip link set "$IFACE" down 2>/dev/null || true
+/sbin/ip link set "$IFACE" type can bitrate 20000
+/sbin/ip link set "$IFACE" up
+```
+
+Save that as `/usr/local/sbin/can-up`, make it executable, then create `/etc/systemd/system/can-up@.service`:
+
+```ini
+[Unit]
+Description=Bring up %I CAN
+BindsTo=sys-subsystem-net-devices-%i.device
+After=sys-subsystem-net-devices-%i.device
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/can-up %I
+RemainAfterExit=yes
+```
+
+And `/etc/udev/rules.d/80-can0-auto-up.rules`:
+
+```udev
+ACTION=="add", SUBSYSTEM=="net", KERNEL=="can0", TAG+="systemd", ENV{SYSTEMD_WANTS}+="can-up@can0.service"
+```
+
+Finally reload the configuration:
+
+```bash
+sudo systemctl daemon-reload
+sudo udevadm control --reload
+sudo udevadm trigger -c add /sys/class/net/can0
+```
+
+### PiCAN 2 HAT
+
+If you use a PiCAN 2 HAT instead, first set up the HAT according to its [documentation](https://raspberry-valley.azurewebsites.net/ref/Raspberry-Pi-PICAN2-Hat-User-Guide.pdf) and the pyHPSU [README](https://github.com/Spanni26/pyHPSU/blob/master/README.md), then reboot.
 
 For this you need access to the host OS:
 
 ```bash
-sudo nano /boot/config.txt
+sudo nano /boot/firmware/config.txt
 ```
 
 Add:
@@ -111,11 +190,13 @@ pyHPSU jobs are commands that are passed to the heat pump at regular intervals t
 ```
 
 This reads the domestic hot water temperature (`t_dhw`) and the current heat generator temperature (`t_hs`) every 10 seconds.
-Results are written to MQTT as `/rotex/t_dhw` and `/rotex/t_hs` with their respective values as payloads.
+With the default `mqtt_prefix` of `rotex`, results are written to MQTT as `/rotex/t_dhw` and `/rotex/t_hs` with their respective values as payloads. If you changed `mqtt_prefix`, replace `rotex` in the examples below with your configured prefix.
+
+To confirm that the add-on is publishing to MQTT, use Home Assistant's MQTT integration and listen temporarily on `<mqtt_prefix>/#` under `Settings` -> `Devices & Services` -> `MQTT` -> `Configure` -> `Listen to a topic`. For example, if `mqtt_prefix` is left at the default, listen on `rotex/#`.
 
 ## Home Assistant integration
 
-In Home Assistant you can read values from MQTT by adding sensors in your `configuration.yaml` (for example via the File Editor add-on):
+In Home Assistant you can read values from MQTT by adding sensors in your `configuration.yaml` (for example via the File Editor add-on). The examples below use the default `mqtt_prefix` of `rotex`; replace it with your configured prefix if you changed it:
 
 ```yaml
 sensor:

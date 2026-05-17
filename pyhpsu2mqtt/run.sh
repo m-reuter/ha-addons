@@ -35,7 +35,7 @@ cp pyhpsu.conf /etc/pyHPSU/pyhpsu.conf
 echo
 echo "pyHPSU configuration (sensitive values redacted):"
 echo
-sed -E 's/^(PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf
+sed -E 's/^([[:space:]]*PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf
 echo
 
 export PYTHONPATH="/usr/lib/python3/dist-packages"
