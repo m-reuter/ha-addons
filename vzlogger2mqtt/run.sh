@@ -21,6 +21,81 @@ MQTT_KEYPASS="$(bashio::config 'mqtt_keypass' '')"
 [[ "$MQTT_KEYFILE"  == "null" ]] && MQTT_KEYFILE=""
 [[ "$MQTT_KEYPASS"  == "null" ]] && MQTT_KEYPASS=""
 
+configure_serial_device() {
+    local device="$1"
+    local baudrate="$2"
+    local parity="$3"
+
+    if ! command -v stty >/dev/null 2>&1 || [[ ! -e "$device" ]]; then
+        return 0
+    fi
+
+    local databits="${parity:0:1}"
+    local parity_mode="${parity:1:1}"
+    local stopbits="${parity:2:1}"
+    local stty_args=(raw "$baudrate" -echo -ixon -ixoff -crtscts clocal)
+
+    case "$databits" in
+        7) stty_args+=(cs7) ;;
+        8) stty_args+=(cs8) ;;
+    esac
+
+    case "$parity_mode" in
+        [Nn]) stty_args+=(-parenb -parodd) ;;
+        [Ee]) stty_args+=(parenb -parodd) ;;
+        [Oo]) stty_args+=(parenb parodd) ;;
+    esac
+
+    case "$stopbits" in
+        1) stty_args+=(-cstopb) ;;
+        2) stty_args+=(cstopb) ;;
+    esac
+
+    stty -F "$device" "${stty_args[@]}" 2>/dev/null || true
+}
+
+drain_serial_device() {
+    local device="$1"
+    local baudrate="$2"
+    local parity="$3"
+    local label="$4"
+    local drained=0
+    local deadline
+    local fd
+
+    if [[ -z "$device" || "$device" != /dev/* || ! -e "$device" ]]; then
+        return 0
+    fi
+
+    echo "Preparing ${label} device ${device} ..."
+    configure_serial_device "$device" "$baudrate" "$parity"
+
+    if ! exec {fd}<"$device"; then
+        echo "Warning: could not open ${device} to drain stale input."
+        return 0
+    fi
+
+    deadline=$((SECONDS + 5))
+    while (( SECONDS < deadline )); do
+        if IFS= read -r -t 0.2 -u "$fd" -N 1; then
+            ((drained += 1))
+            while IFS= read -r -t 0.05 -u "$fd" -N 1; do
+                ((drained += 1))
+            done
+        else
+            break
+        fi
+    done
+
+    exec {fd}<&-
+
+    if (( drained > 0 )); then
+        echo "Discarded ${drained} stale byte(s) from ${label} before startup."
+    else
+        echo "No stale bytes waiting on ${label}."
+    fi
+}
+
 # ── Meter 1 settings ─────────────────────────────────────────────────────────
 METER1_PROTOCOL="$(bashio::config 'meter1_protocol')"
 METER1_PARITY="$(bashio::config 'meter1_parity')"
@@ -202,6 +277,9 @@ echo
 
 # Give the serial device time to finish enumerating after an HA restart
 sleep 3
+
+drain_serial_device "$METER1_DEVICE" "$METER1_BAUDRATE_READ" "$METER1_PARITY" "meter1"
+drain_serial_device "$METER2_DEVICE" "${METER2_BAUDRATE_READ:-9600}" "${METER2_PARITY:-8N1}" "meter2"
 
 # Reset the log on each start so stale output does not accumulate across restarts.
 : > /vzlogger.log
