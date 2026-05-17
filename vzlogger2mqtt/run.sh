@@ -59,7 +59,6 @@ drain_serial_device() {
     local baudrate="$2"
     local parity="$3"
     local label="$4"
-    local byte=""
     local drained=0
     local deadline
     local fd
@@ -78,9 +77,9 @@ drain_serial_device() {
 
     deadline=$((SECONDS + 5))
     while (( SECONDS < deadline )); do
-        if IFS= read -r -t 0.2 -u "$fd" -N 1 byte; then
+        if IFS= read -r -t 0.2 -u "$fd" -N 1; then
             ((drained += 1))
-            while IFS= read -r -t 0.05 -u "$fd" -N 1 byte; do
+            while IFS= read -r -t 0.05 -u "$fd" -N 1; do
                 ((drained += 1))
             done
         else
