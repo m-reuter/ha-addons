@@ -126,7 +126,7 @@ https://wiki.volkszaehler.org/software/controller/vzlogger/overview_en
 ### Meter stops reading after Home Assistant restart (HA 2026.5+)
 
 HA 2026.5 changed how USB serial devices are handed to containers, which can cause the meter's serial stream to arrive mid-frame after a restart, producing log spam like `Too much data for value` or `Too much data for unit`.
-The add-on includes a 3-second startup delay to let the device settle, and enables the vzlogger built-in HTTP server so Home Assistant can automatically restart the add-on if it stops producing readings.
+The add-on now waits briefly for USB serial devices to settle and drains any stale bytes from each configured meter device before launching `vzlogger`. It also enables the vzlogger built-in HTTP server so Home Assistant can automatically restart the add-on if it stops producing readings.
 
 For extra reliability, consider setting up an automation that restarts the add-on when no MQTT messages have been received for a configurable period.
 
