@@ -1,10 +1,10 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
+ARG PYHPSU_REF=4fcb37d7c28c970073d720923c28dc781eb92a85
 
 ENV LANG C.UTF-8
 
 # install packages
-# eventually pull pyhpsu master once mqtt is merged from testing
 RUN apk add --no-cache \
     ca-certificates \
     git \
@@ -21,8 +21,9 @@ RUN apk add --no-cache \
     && pip3 install \
         --no-cache-dir \
         --prefer-binary \
+        --upgrade \
         python-can \
-        serial \
+        pyserial \
         paho-mqtt \
         pika \
         requests \
@@ -32,11 +33,12 @@ RUN apk add --no-cache \
         -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
         -exec rm -rf '{}' + \
     \
-    && cd /opt \
-    && git clone https://github.com/Spanni26/pyHPSU.git \
-    && cd pyHPSU \
-    && git fetch origin pull/54/head:mqtt \
-    && git checkout mqtt \
+    && mkdir -p /opt/pyHPSU \
+    && cd /opt/pyHPSU \
+    && git init \
+    && git remote add origin https://github.com/Spanni26/pyHPSU.git \
+    && git fetch --depth 1 origin "${PYHPSU_REF}" \
+    && git checkout --detach FETCH_HEAD \
     && chmod +x install.sh \
     && sh install.sh
 
