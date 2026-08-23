@@ -47,9 +47,11 @@ COPY pyhpsu.conf /
 COPY canpi.py /usr/local/share/pyhpsu-canpi.py
 COPY mqtt_command_daemon.py /usr/local/bin/mqtt_command_daemon.py
 COPY mqtt_plugin.py /usr/local/share/pyhpsu-mqtt-plugin.py
+COPY pyHPSU.py /usr/local/share/pyhpsu-entrypoint.py
 COPY run.sh /
 RUN cp /usr/local/share/pyhpsu-mqtt-plugin.py /usr/lib/python3/dist-packages/HPSU/plugins/mqtt.py \
     && cp /usr/local/share/pyhpsu-canpi.py /usr/lib/python3/dist-packages/HPSU/canpi.py \
-    && chmod a+x /run.sh /usr/local/bin/mqtt_command_daemon.py
+    && cp /usr/local/share/pyhpsu-entrypoint.py /usr/bin/pyHPSU.py \
+    && chmod a+x /run.sh /usr/local/bin/mqtt_command_daemon.py /usr/bin/pyHPSU.py
 
 CMD [ "/run.sh" ]
