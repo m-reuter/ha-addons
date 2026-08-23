@@ -38,6 +38,8 @@ echo
 sed -E 's/^([[:space:]]*PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf
 echo
 
+export PYTHONPATH="/usr/lib/python3/dist-packages"
+
 python3 /usr/local/bin/mqtt_command_daemon.py /etc/pyHPSU/pyhpsu.conf &
 MQTT_DAEMON_PID=$!
 
@@ -47,5 +49,4 @@ cleanup() {
 
 trap cleanup EXIT INT TERM
 
-export PYTHONPATH="/usr/lib/python3/dist-packages"
 pyHPSU.py -a -o MQTT
