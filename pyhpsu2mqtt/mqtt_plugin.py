@@ -3,9 +3,8 @@
 
 import configparser
 import os
-import sys
-
 import paho.mqtt.client as mqtt
+import sys
 
 
 def make_client(client_id):
@@ -46,20 +45,28 @@ class export:
         if self.username:
             self.client.username_pw_set(self.username, password=self.password)
         self.client.enable_logger()
+        self.client.reconnect_delay_set(min_delay=1, max_delay=30)
+        self.client.connect_async(self.brokerhost, port=self.brokerport)
+        self.client.loop_start()
 
     def pushValues(self, vars=None):
-        self.client.connect(self.brokerhost, port=self.brokerport)
-        try:
-            for item in vars or []:
-                if self.prefix:
-                    topic = f"{self.prefix}/{item['name']}"
-                else:
-                    topic = item["name"]
-                self.client.publish(
-                    topic,
-                    payload=item["resp"],
-                    qos=int(self.qos),
-                    retain=self.retain,
-                )
-        finally:
-            self.client.disconnect()
+        for item in vars or []:
+            if self.prefix:
+                topic = f"{self.prefix}/{item['name']}"
+            else:
+                topic = item["name"]
+            self.client.publish(
+                topic,
+                payload=item["resp"],
+                qos=int(self.qos),
+                retain=self.retain,
+            )
+
+    def __del__(self):
+        client = getattr(self, "client", None)
+        if client is not None:
+            try:
+                client.loop_stop()
+                client.disconnect()
+            except Exception:
+                pass
