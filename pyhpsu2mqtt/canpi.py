@@ -11,7 +11,6 @@ try:
 except Exception:
     pass
 
-
 LOCK_FILE = "/run/pyhpsu-can.lock"
 
 
@@ -35,6 +34,14 @@ class CanPI(object):
         config.read(ini_file)
         self.timeout = float(self.get_with_default(config=config, section="CANPI", name="timeout", default=0.05))
         self.retry = float(self.get_with_default(config=config, section="CANPI", name="retry", default=15))
+
+    def __del__(self):
+        bus = getattr(self, "bus", None)
+        if bus is not None:
+            try:
+                bus.shutdown()
+            except Exception:
+                pass
 
     def get_with_default(self, config, section, name, default):
         if "config" not in config.sections():
@@ -116,9 +123,9 @@ class CanPI(object):
 
             if rc_bus:
                 if (
-                    msg_data[2] == 0xFA
-                    and msg_data[3] == rc_bus.data[3]
-                    and msg_data[4] == rc_bus.data[4]
+                        msg_data[2] == 0xFA
+                        and msg_data[3] == rc_bus.data[3]
+                        and msg_data[4] == rc_bus.data[4]
                 ) or (msg_data[2] != 0xFA and msg_data[2] == rc_bus.data[2]):
                     return "%02X %02X %02X %02X %02X %02X %02X" % (
                         rc_bus.data[0],
