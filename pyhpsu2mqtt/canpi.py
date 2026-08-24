@@ -20,6 +20,9 @@ class CanPI(object):
     timeout = None
     retry = None
 
+    # matches Python logging's severity ordering, and PR#54's --log_level default of ERROR
+    _LEVELS = {"debug": 10, "info": 20, "warning": 30, "error": 40, "exception": 40}
+
     def __init__(self, hpsu=None):
         self.hpsu = hpsu
         try:
@@ -35,6 +38,8 @@ class CanPI(object):
         config.read(ini_file)
         self.timeout = float(self.get_with_default(config=config, section="CANPI", name="timeout", default=0.05))
         self.retry = float(self.get_with_default(config=config, section="CANPI", name="retry", default=15))
+        log_level = self.get_with_default(config=config, section="CANPI", name="log_level", default="ERROR")
+        self.log_level_value = self._LEVELS.get(log_level.lower(), self._LEVELS["error"])
 
     def __del__(self):
         bus = getattr(self, "bus", None)
@@ -45,6 +50,8 @@ class CanPI(object):
                 pass
 
     def _log(self, level, msg):
+        if self._LEVELS.get(level, self._LEVELS["error"]) < self.log_level_value:
+            return
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
         self.hpsu.printd(level, "%s - %s" % (timestamp, msg))
 
@@ -143,10 +150,10 @@ class CanPI(object):
                         rc_bus.data[6],
                     )
 
-                self._log("error", "CanPI %s, SEND:%s" % (cmd_name, str(msg_data)))
-                self._log("error", "CanPI %s, RECV:%s" % (cmd_name, str(rc_bus.data)))
+                self._log("warning", "CanPI %s, SEND:%s" % (cmd_name, str(msg_data)))
+                self._log("warning", "CanPI %s, RECV:%s" % (cmd_name, str(rc_bus.data)))
             else:
-                self._log("error", "CanPI %s, Not aquired bus" % cmd_name)
+                self._log("warning", "CanPI %s, Not aquired bus" % cmd_name)
 
             self._log("warning", "CanPI %s, msg not sync, retry: %s" % (cmd_name, retry_count))
             if retry_count >= self.retry:
