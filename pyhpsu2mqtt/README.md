@@ -285,8 +285,11 @@ the target temperature, which is usually 50 minutes by default.
 
 ### Security and permissions
 
-To access the host `can0` interface (PiCAN 2 HAT), this add-on currently needs `--network host`.
-If you know how to limit access to `can0` more narrowly, let me know.
+This add-on runs with `host_network: true` (`--network host`) so it can access the host's `can0` interface directly —
+whether that interface comes from a USB `gs_usb` adapter or a PiCAN 2 HAT, it lives in the host's network namespace, and
+without host networking the container would not see it at all. This grants the container the host's full network stack,
+not just `can0`; narrowing that down isn't practical here since CAN interfaces are network devices tied to a Linux
+network namespace, not something a capability like `NET_ADMIN` alone can expose from the host.
 
 ### Rotex heat pump settings
 
