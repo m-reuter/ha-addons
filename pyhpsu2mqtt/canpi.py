@@ -60,9 +60,6 @@ class CanPI(object):
         print("%s - %s - %s" % (timestamp, level.upper(), msg))
 
     def get_with_default(self, config, section, name, default):
-        if "config" not in config.sections():
-            return default
-
         if config.has_option(section, name):
             return config.get(section, name)
         return default
