@@ -196,9 +196,10 @@ Timeout in seconds for the CAN interface (default: `0.05`).
 
 ### canpi_log_level (list)
 
-Log level for CAN bus retry/timeout diagnostics (`DEBUG`, `INFO`, `WARNING`, or `ERROR`; default: `ERROR`). At the
-default level, only final failures after all retries are logged. Set to `WARNING` to also see individual retry attempts
-and raw `SEND`/`RECV` bytes, which is useful when diagnosing bus issues but produces much more log output.
+Log level for CAN bus retry/timeout diagnostics (`WARNING` or `ERROR`; default: `ERROR`). At the default level, only
+final failures after all retries are logged. Set to `WARNING` to also see individual retry attempts and raw
+`SEND`/`RECV` bytes, which is useful when diagnosing bus issues but produces much more log output. This setting only
+affects CAN bus diagnostics; other log lines (for example from the MQTT command listener) are unaffected.
 
 ### jobs (list of dict)
 

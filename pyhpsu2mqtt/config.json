@@ -44,7 +44,7 @@
     "mqtt_prefix": "str",
     "mqtt_commandtopic": "str",
     "canpi_timeout": "float",
-    "canpi_log_level": "list(DEBUG|INFO|WARNING|ERROR)",
+    "canpi_log_level": "list(WARNING|ERROR)",
     "jobs": [
       {
         "command": "str?",
