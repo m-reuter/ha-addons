@@ -18,6 +18,7 @@ import sys
 import threading
 import time
 from HPSU.HPSU import HPSU
+from datetime import datetime
 
 SocketPort = 7060
 
@@ -316,9 +317,11 @@ def read_can(n_hpsu, driver, logger, port, cmd, lg_code, verbose, output_type):
             else:
                 i += 1
                 time.sleep(2.0)
-                n_hpsu.printd('warning', 'retry %s command %s' % (i, c["name"]))
+                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
+                print("%s - WARNING - retry %s command %s" % (timestamp, i, c["name"]))
                 if i == 4:
-                    n_hpsu.printd('error', 'command %s failed' % (c["name"]))
+                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
+                    print("%s - ERROR - command %s failed" % (timestamp, c["name"]))
 
     if output_type == "JSON":
         if len(arrResponse) != 0:
