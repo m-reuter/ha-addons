@@ -31,13 +31,13 @@ sed -i "s/{canpi_timeout}/${CANPI_TIMEOUT}/g" "pyhpsu.conf"
 sed -i "s/{canpi_log_level}/${CANPI_LOG_LEVEL}/g" "pyhpsu.conf"
 sed -i "s/{jobs}/${JOBS//$'\n'/\\n}/g" "pyhpsu.conf"
 
-echo "Initializing pyhpsu configuration ..."
+echo "$(date '+%Y-%m-%d %H:%M:%S') - Initializing pyhpsu configuration ..."
 cp pyhpsu.conf /etc/pyHPSU/pyhpsu.conf
 
 echo
-echo "pyHPSU configuration (sensitive values redacted):"
+echo "$(date '+%Y-%m-%d %H:%M:%S') - pyHPSU configuration (sensitive values redacted):"
 echo
-sed -E 's/^([[:space:]]*PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf
+sed -E 's/^([[:space:]]*PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf | sed 's/^/    /'
 echo
 
 export PYTHONPATH="/usr/lib/python3/dist-packages"
