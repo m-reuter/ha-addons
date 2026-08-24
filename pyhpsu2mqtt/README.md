@@ -192,7 +192,7 @@ Topic for commands going from MQTT to pyHPSU (default: `command`).
 
 ### canpi_timeout (float)
 
-Timeout in seconds for the CAN interface (default: `0.05`).
+Timeout in seconds for the CAN interface (default: `0.1`).
 
 ### canpi_log_level (list)
 

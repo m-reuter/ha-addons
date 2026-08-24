@@ -36,7 +36,7 @@ class CanPI(object):
         config = configparser.ConfigParser()
         ini_file = "%s/%s.conf" % (self.hpsu.pathCOMMANDS, "pyhpsu")
         config.read(ini_file)
-        self.timeout = float(self.get_with_default(config=config, section="CANPI", name="timeout", default=0.05))
+        self.timeout = float(self.get_with_default(config=config, section="CANPI", name="timeout", default=0.1))
         self.retry = float(self.get_with_default(config=config, section="CANPI", name="retry", default=15))
         log_level = self.get_with_default(config=config, section="CANPI", name="log_level", default="ERROR")
         self.log_level_value = self._LEVELS.get(log_level.lower(), self._LEVELS["error"])
