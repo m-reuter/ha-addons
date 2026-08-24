@@ -5,6 +5,7 @@ import configparser
 import os
 import paho.mqtt.client as mqtt
 import sys
+import threading
 
 
 def make_client(client_id):
@@ -15,6 +16,28 @@ def make_client(client_id):
         )
     except (AttributeError, TypeError, ValueError):
         return mqtt.Client(client_id=client_id)
+
+
+_client_lock = threading.Lock()
+_client = None
+
+
+def _shared_client(clientname, brokerhost, brokerport, username, password):
+    # export() is instantiated fresh per job cycle by pyHPSU's scheduler, so a
+    # per-instance connection would reconnect every time; reuse one
+    # process-wide connection across all instances instead.
+    global _client
+    with _client_lock:
+        if _client is None:
+            client = make_client(f"{clientname}-{os.getpid()}")
+            if username:
+                client.username_pw_set(username, password=password)
+            client.enable_logger()
+            client.reconnect_delay_set(min_delay=1, max_delay=30)
+            client.connect_async(brokerhost, port=brokerport)
+            client.loop_start()
+            _client = client
+        return _client
 
 
 class export:
@@ -40,25 +63,19 @@ class export:
         self.qos = mqtt_config.getint("QOS", 0)
         self.retain = mqtt_config.get("RETAIN", "NOT TRUE") == "True"
 
-        client_name = f"{self.clientname}-{os.getpid()}"
-        self.client = make_client(client_name)
-        if self.username:
-            self.client.username_pw_set(self.username, password=self.password)
-        self.client.enable_logger()
+        self.client = _shared_client(
+            self.clientname, self.brokerhost, self.brokerport, self.username, self.password
+        )
 
     def pushValues(self, vars=None):
-        self.client.connect(self.brokerhost, port=self.brokerport)
-        try:
-            for item in vars or []:
-                if self.prefix:
-                    topic = f"{self.prefix}/{item['name']}"
-                else:
-                    topic = item["name"]
-                self.client.publish(
-                    topic,
-                    payload=item["resp"],
-                    qos=int(self.qos),
-                    retain=self.retain,
-                )
-        finally:
-            self.client.disconnect()
+        for item in vars or []:
+            if self.prefix:
+                topic = f"{self.prefix}/{item['name']}"
+            else:
+                topic = item["name"]
+            self.client.publish(
+                topic,
+                payload=item["resp"],
+                qos=int(self.qos),
+                retain=self.retain,
+            )
