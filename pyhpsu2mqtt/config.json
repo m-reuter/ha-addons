@@ -4,7 +4,12 @@
   "slug": "pyhpsu2mqtt",
   "description": "pyHPSU - Connect via CAN bus to ROTEX/Daikin Heat Pump",
   "url": "https://github.com/m-reuter/ha-addons/tree/master/pyhpsu2mqtt",
-  "arch": ["armhf", "armv7", "aarch64", "amd64"],
+  "arch": [
+    "armhf",
+    "armv7",
+    "aarch64",
+    "amd64"
+  ],
   "startup": "system",
   "boot": "auto",
   "host_network": true,
@@ -20,8 +25,12 @@
     "mqtt_prefix": "rotex",
     "mqtt_commandtopic": "command",
     "canpi_timeout": 0.05,
-    "jobs" : [
-      { "command": "t_dhw", "interval": 10 }
+    "canpi_log_level": "ERROR",
+    "jobs": [
+      {
+        "command": "t_dhw",
+        "interval": 10
+      }
     ]
   },
   "schema": {
@@ -35,8 +44,12 @@
     "mqtt_prefix": "str",
     "mqtt_commandtopic": "str",
     "canpi_timeout": "float",
-    "jobs" : [
-      { "command": "str?", "interval": "int?" }
+    "canpi_log_level": "list(DEBUG|INFO|WARNING|ERROR)",
+    "jobs": [
+      {
+        "command": "str?",
+        "interval": "int?"
+      }
     ]
   },
   "image": "mreuter/{arch}-pyhpsu2mqtt"

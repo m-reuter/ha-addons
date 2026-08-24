@@ -194,6 +194,12 @@ Topic for commands going from MQTT to pyHPSU (default: `command`).
 
 Timeout in seconds for the CAN interface (default: `0.05`).
 
+### canpi_log_level (list)
+
+Log level for CAN bus retry/timeout diagnostics (`DEBUG`, `INFO`, `WARNING`, or `ERROR`; default: `ERROR`). At the
+default level, only final failures after all retries are logged. Set to `WARNING` to also see individual retry attempts
+and raw `SEND`/`RECV` bytes, which is useful when diagnosing bus issues but produces much more log output.
+
 ### jobs (list of dict)
 
 pyHPSU jobs are commands that are passed to the heat pump at regular intervals to read values and report them back to
