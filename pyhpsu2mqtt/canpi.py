@@ -5,6 +5,7 @@ import configparser
 import fcntl
 import os
 import sys
+from datetime import datetime
 
 try:
     import can
@@ -42,6 +43,10 @@ class CanPI(object):
                 bus.shutdown()
             except Exception:
                 pass
+
+    def _log(self, level, msg):
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
+        self.hpsu.printd(level, "%s - %s" % (timestamp, msg))
 
     def get_with_default(self, config, section, name, default):
         if "config" not in config.sections():
@@ -109,7 +114,7 @@ class CanPI(object):
             msg = self.make_can_message(receiver_id, msg_data)
             self.bus.send(msg)
         except Exception as exc:
-            self.hpsu.printd("exception", f"CanPI {cmd_name}, Error sending msg: {exc}")
+            self._log("exception", f"CanPI {cmd_name}, Error sending msg: {exc}")
 
         if setValue:
             return "OK"
@@ -120,7 +125,7 @@ class CanPI(object):
             try:
                 rc_bus = self.bus.recv(self.timeout)
             except Exception:
-                self.hpsu.printd("exception", f"CanPI {cmd_name}, Error recv")
+                self._log("exception", f"CanPI {cmd_name}, Error recv")
 
             if rc_bus:
                 if (
@@ -138,14 +143,14 @@ class CanPI(object):
                         rc_bus.data[6],
                     )
 
-                self.hpsu.printd("error", "CanPI %s, SEND:%s" % (cmd_name, str(msg_data)))
-                self.hpsu.printd("error", "CanPI %s, RECV:%s" % (cmd_name, str(rc_bus.data)))
+                self._log("error", "CanPI %s, SEND:%s" % (cmd_name, str(msg_data)))
+                self._log("error", "CanPI %s, RECV:%s" % (cmd_name, str(rc_bus.data)))
             else:
-                self.hpsu.printd("error", "CanPI %s, Not aquired bus" % cmd_name)
+                self._log("error", "CanPI %s, Not aquired bus" % cmd_name)
 
-            self.hpsu.printd("warning", "CanPI %s, msg not sync, retry: %s" % (cmd_name, retry_count))
+            self._log("warning", "CanPI %s, msg not sync, retry: %s" % (cmd_name, retry_count))
             if retry_count >= self.retry:
-                self.hpsu.printd("error", "CanPI %s, msg not sync, timeout" % cmd_name)
+                self._log("error", "CanPI %s, msg not sync, timeout" % cmd_name)
                 not_timeout = False
 
         return "KO"
