@@ -52,8 +52,12 @@ class CanPI(object):
     def _log(self, level, msg):
         if self._LEVELS.get(level, self._LEVELS["error"]) < self.log_level_value:
             return
+        logger = getattr(self.hpsu, "logger", None)
+        if logger:
+            getattr(logger, "error" if level == "exception" else level)(msg)
+            return
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
-        self.hpsu.printd(level, "%s - %s" % (timestamp, msg))
+        print("%s - %s - %s" % (timestamp, level.upper(), msg))
 
     def get_with_default(self, config, section, name, default):
         if "config" not in config.sections():
