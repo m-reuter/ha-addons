@@ -154,7 +154,7 @@ class CanPI(object):
                 self._log("warning", "CanPI %s, SEND:%s" % (cmd_name, str(msg_data)))
                 self._log("warning", "CanPI %s, RECV:%s" % (cmd_name, str(rc_bus.data)))
             else:
-                self._log("warning", "CanPI %s, Not aquired bus" % cmd_name)
+                self._log("warning", "CanPI %s, Not acquired bus" % cmd_name)
 
             self._log("warning", "CanPI %s, msg not sync, retry: %s" % (cmd_name, retry_count))
             if retry_count >= self.retry:
