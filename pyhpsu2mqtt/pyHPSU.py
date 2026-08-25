@@ -317,8 +317,10 @@ def read_can(n_hpsu, driver, logger, port, cmd, lg_code, verbose, output_type):
             else:
                 i += 1
                 time.sleep(2.0)
-                timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
-                print("%s - WARNING - retry %s command %s" % (timestamp, i, c["name"]))
+                log_level = config.get('CANPI', 'log_level', fallback='ERROR').strip().upper()
+                if log_level != 'ERROR':
+                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
+                    print("%s - WARNING - retry %s command %s" % (timestamp, i, c["name"]))
                 if i == 4:
                     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
                     print("%s - ERROR - command %s failed" % (timestamp, c["name"]))
