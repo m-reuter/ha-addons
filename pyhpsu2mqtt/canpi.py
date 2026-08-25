@@ -80,13 +80,13 @@ class CanPI(object):
             )
 
     def sendCommandWithID(self, cmd, setValue=None, priority=1):
-        if setValue:
+        if setValue is not None:
             receiver_id = 0x680
         else:
             receiver_id = int(cmd["id"], 16)
         command = cmd["command"]
 
-        if setValue:
+        if setValue is not None:
             command = command[:1] + "2" + command[2:]
             if command[6:8] != "FA":
                 command = command[:3] + "00 FA" + command[2:8]
@@ -124,7 +124,7 @@ class CanPI(object):
         except Exception as exc:
             self._log("exception", f"CanPI {cmd_name}, Error sending msg: {exc}")
 
-        if setValue:
+        if setValue is not None:
             return "OK"
 
         while not_timeout:
