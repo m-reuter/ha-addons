@@ -3,11 +3,9 @@
 import configparser
 import logging
 import os
+import paho.mqtt.client as mqtt
 import subprocess
 import sys
-
-import paho.mqtt.client as mqtt
-
 
 LOGGER = logging.getLogger("pyhpsu-mqtt-command-daemon")
 
@@ -84,7 +82,7 @@ def on_connect(client, _userdata, _flags, reason_code, _properties=None):
 
 def on_message(_client, userdata, message):
     command = message.topic.rsplit("/", 1)[-1]
-    payload = message.payload.decode("utf-8").strip()
+    payload = message.payload.decode("utf-8", errors="replace").strip()
     LOGGER.info("Received MQTT command %s=%s", command, payload or "<read>")
 
     if payload.lower() in ("", "read"):
