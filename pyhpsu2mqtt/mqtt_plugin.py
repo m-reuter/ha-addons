@@ -61,7 +61,7 @@ class export:
         self.password = mqtt_config.get("PASSWORD", "NoPasswordSpecified")
         self.prefix = mqtt_config.get("PREFIX", "")
         self.qos = mqtt_config.getint("QOS", 0)
-        self.retain = mqtt_config.get("RETAIN", "NOT TRUE") == "True"
+        self.retain = mqtt_config.getboolean("RETAIN", fallback=False)
 
         self.client = _shared_client(
             self.clientname, self.brokerhost, self.brokerport, self.username, self.password
