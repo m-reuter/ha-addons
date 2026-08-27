@@ -12,6 +12,7 @@ MQTT_CLIENTNAME="$(bashio::config 'mqtt_clientname')"
 MQTT_PREFIX="$(bashio::config 'mqtt_prefix')"
 MQTT_COMMANDTOPIC="$(bashio::config 'mqtt_commandtopic')"
 CANPI_TIMEOUT="$(bashio::config 'canpi_timeout')"
+CANPI_LOG_LEVEL="$(bashio::config 'canpi_log_level')"
 JOBS=$(jq -r 'if .jobs then [.jobs[] | .command+"="+(.interval|tostring) ] | join("\n") else "" end' /data/options.json)
 
 
@@ -27,16 +28,27 @@ sed -i "s/{mqtt_clientname}/${MQTT_CLIENTNAME}/g" "pyhpsu.conf"
 sed -i "s#{mqtt_prefix}#${MQTT_PREFIX}#g" "pyhpsu.conf"
 sed -i "s#{mqtt_commandtopic}#${MQTT_COMMANDTOPIC}#g" "pyhpsu.conf"
 sed -i "s/{canpi_timeout}/${CANPI_TIMEOUT}/g" "pyhpsu.conf"
+sed -i "s/{canpi_log_level}/${CANPI_LOG_LEVEL}/g" "pyhpsu.conf"
 sed -i "s/{jobs}/${JOBS//$'\n'/\\n}/g" "pyhpsu.conf"
 
-echo "Initializing pyhpsu configuration ..."
+echo "$(date '+%Y-%m-%d %H:%M:%S') - Initializing pyhpsu configuration ..."
 cp pyhpsu.conf /etc/pyHPSU/pyhpsu.conf
 
 echo
-echo "pyHPSU configuration (sensitive values redacted):"
+echo "$(date '+%Y-%m-%d %H:%M:%S') - pyHPSU configuration (sensitive values redacted):"
 echo
-sed -E 's/^([[:space:]]*PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf
+sed -E 's/^([[:space:]]*PASSWORD[[:space:]]*=[[:space:]]*).*/\1<redacted>/' pyhpsu.conf | sed 's/^/    /'
 echo
 
 export PYTHONPATH="/usr/lib/python3/dist-packages"
-pyHPSU.py --mqtt_daemon -a -o mqtt
+
+python3 /usr/local/bin/mqtt_command_daemon.py /etc/pyHPSU/pyhpsu.conf &
+MQTT_DAEMON_PID=$!
+
+cleanup() {
+    kill "${MQTT_DAEMON_PID}" 2>/dev/null || true
+}
+
+trap cleanup EXIT INT TERM
+
+pyHPSU.py -a -o MQTT

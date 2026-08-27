@@ -11,7 +11,7 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Validate JSON files
         run: |
@@ -39,10 +39,10 @@ jobs:
     name: Build amd64 (no push)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Read BUILD_FROM for amd64
         id: meta
@@ -50,7 +50,7 @@ jobs:
           echo "build_from=$(jq -r '.build_from.amd64' vzlogger2mqtt/build.json)" >> "$GITHUB_OUTPUT"
 
       - name: Build (amd64 only, no push)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: vzlogger2mqtt
           push: false
